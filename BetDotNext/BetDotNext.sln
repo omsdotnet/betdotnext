@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetDotNext", "BetDotNext\BetDotNext.csproj", "{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetDotNext.Tests", "BetDotNext.Tests\BetDotNext.Tests.csproj", "{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
