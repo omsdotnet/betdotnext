@@ -1,6 +1,7 @@
 using System;
 using BetDotNext.Commands;
 using BetDotNext.Data;
+using BetDotNext.Utils;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
@@ -20,6 +21,11 @@ namespace BetDotNext.Services
         public BetService(ITelegramBotClient telegramBotClient, UserRepository userRepository,
             ILogger<BetService> logger, IMediator mediator)
         {
+            Ensure.NotNull(telegramBotClient, nameof(telegramBotClient));
+            Ensure.NotNull(userRepository, nameof(userRepository));
+            Ensure.NotNull(logger, nameof(logger));
+            Ensure.NotNull(mediator, nameof(mediator));
+            
             _telegramBotClient = telegramBotClient ?? throw new ArgumentNullException(nameof(telegramBotClient));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

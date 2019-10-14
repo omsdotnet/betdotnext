@@ -7,9 +7,10 @@ namespace BetDotNext.Handlers
 {
     public class HelloHandler : IRequestHandler<HelloCommand>
     {
-        public Task<Unit> Handle(HelloCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(HelloCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new Unit());
+            await Task.FromResult(new Unit());
+            return Unit.Value;
         }
     }
 }

@@ -1,28 +1,36 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BetDotNext.Utils;
 using Microsoft.Extensions.Hosting;
 
 namespace BetDotNext.Services
 {
-    public class BetToTelegramService : IHostedService
+    internal class BetToTelegramService : IHostedService
     {
-        private Timer _timer;
+        private readonly Timer _timer;
         private readonly QueueMessagesService _queueMessagesService;
         
         public BetToTelegramService(QueueMessagesService queueMessagesService)
         {
-            _queueMessagesService = queueMessagesService ?? throw new ArgumentNullException(nameof(queueMessagesService));
+            Ensure.NotNull(queueMessagesService, nameof(queueMessagesService));
+            
+            _queueMessagesService = queueMessagesService;
+            _timer = new Timer(OnTick, null, 0, 0);
         }
-        
+
+        private void OnTick(object state)
+        {
+        }
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await _timer.DisposeAsync();
         }
     }
 }
