@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY /BetDotNext ./
 
-RUN ls -l
-
 RUN dotnet restore
 
 COPY /BetDotNext ./
