@@ -21,10 +21,12 @@ namespace BetDotNext
             var telegramToken = string.Empty;
 
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
-            services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit(adminPass, userPass));
+            services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
+            
             services.AddSingleton<BetService>();
             services.AddSingleton<QueueMessagesService>();
-
+            services.AddSingleton<ActiveCommandService>();
+            
             services.AddHostedService<BetToTelegramService>();
 
             services.AddSingleton<UserRepository>();

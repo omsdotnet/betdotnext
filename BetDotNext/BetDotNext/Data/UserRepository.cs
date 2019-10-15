@@ -12,7 +12,7 @@ namespace BetDotNext.Data
         {
             _mongoDatabase = mongoDatabase ?? throw new ArgumentNullException(nameof(mongoDatabase));
         }
-        
-        public User GetUserById(int id) => new User();
+
+        public User GetUserByChatId(long id) => null;
     }
 }

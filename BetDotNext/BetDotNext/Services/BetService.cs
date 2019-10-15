@@ -17,19 +17,22 @@ namespace BetDotNext.Services
         private readonly UserRepository _userRepository;
         private readonly ILogger<BetService> _logger;
         private readonly IMediator _mediator;
+        private readonly ActiveCommandService _activeCommandService;
         
         public BetService(ITelegramBotClient telegramBotClient, UserRepository userRepository,
-            ILogger<BetService> logger, IMediator mediator)
+            ILogger<BetService> logger, IMediator mediator, ActiveCommandService activeCommandService)
         {
             Ensure.NotNull(telegramBotClient, nameof(telegramBotClient));
             Ensure.NotNull(userRepository, nameof(userRepository));
             Ensure.NotNull(logger, nameof(logger));
             Ensure.NotNull(mediator, nameof(mediator));
-            
-            _telegramBotClient = telegramBotClient ?? throw new ArgumentNullException(nameof(telegramBotClient));
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            Ensure.NotNull(activeCommandService, nameof(activeCommandService));
+
+            _telegramBotClient = telegramBotClient;
+            _userRepository = userRepository;
+            _logger = logger;
+            _mediator = mediator;
+            _activeCommandService = activeCommandService;
         }
 
         public void Start()
@@ -68,12 +71,7 @@ namespace BetDotNext.Services
         private void OnMessageReceive(object sender, MessageEventArgs args)
         {
             Message message = args.Message;
-            if (message == null || message.From == null)
-            {
-                return;
-            }
-
-            if (message.From.IsBot)
+            if (message?.Chat == null)
             {
                 return;
             }
@@ -83,12 +81,12 @@ namespace BetDotNext.Services
 
         private void MessageHandler(Message message)
         {
-            int userId = message.From.Id;
-            var user = _userRepository.GetUserById(userId);
+            var chatId = message.Chat.Id;
+            var user = _userRepository.GetUserByChatId(chatId);
 
             if (user == null)
             {
-                _mediator.Send(new HelloCommand(userId, message.MessageId, message.From.Username));
+                _mediator.Send(new HelloCommand(chatId, message.MessageId, message.From.Username));
                 return;
             }
 

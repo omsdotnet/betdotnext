@@ -1,24 +1,22 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BetDotNext.Models;
 using BetDotNext.Utils;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace BetDotNext.Services
 {
     public class QueueMessagesService
     {
         private readonly IMongoCollection<MessageQueue> _messageQueue;
-        private readonly IMongoQueryable<MessageQueue> _queryable;
 
         public QueueMessagesService(IMongoCollection<MessageQueue> messageQueue)
         {
             Ensure.NotNull(messageQueue, nameof(messageQueue));
             
             _messageQueue = messageQueue;
-            _queryable = messageQueue.AsQueryable();
         }
 
         public void Enqueue(MessageQueue messageQueue)
@@ -33,7 +31,15 @@ namespace BetDotNext.Services
 
         public IEnumerable<MessageQueue> TopMessages(int limit)
         {
-            return Enumerable.Empty<MessageQueue>();
+            if (limit <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(limit));
+            }
+
+            var sort = Builders<MessageQueue>.Sort.Ascending(m => m.StartTime);
+            var timePriority = Builders<MessageQueue>.Filter.Eq(m => m.StartTime, DateTime.UtcNow.AddMinutes(5));
+
+            return _messageQueue.Find(timePriority).Limit(limit).Sort(sort).ToEnumerable();
         }
     }
 }

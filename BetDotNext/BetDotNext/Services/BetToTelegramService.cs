@@ -3,34 +3,41 @@ using System.Threading;
 using System.Threading.Tasks;
 using BetDotNext.Utils;
 using Microsoft.Extensions.Hosting;
+using Telegram.Bot;
 
 namespace BetDotNext.Services
 {
     internal class BetToTelegramService : IHostedService
     {
-        private readonly Timer _timer;
         private readonly QueueMessagesService _queueMessagesService;
+        private readonly ITelegramBotClient _telegramBotClient;
         
-        public BetToTelegramService(QueueMessagesService queueMessagesService)
+        public BetToTelegramService(QueueMessagesService queueMessagesService, ITelegramBotClient telegramBotClient)
         {
             Ensure.NotNull(queueMessagesService, nameof(queueMessagesService));
+            Ensure.NotNull(telegramBotClient, nameof(telegramBotClient));
             
             _queueMessagesService = queueMessagesService;
-            _timer = new Timer(OnTick, null, 0, 0);
+            _telegramBotClient = telegramBotClient;
         }
 
-        private void OnTick(object state)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                foreach (var message in _queueMessagesService.TopMessages(30))
+                {
+                    await _telegramBotClient.SendTextMessageAsync(0, message.Text, cancellationToken: cancellationToken);
+                    _queueMessagesService.Dequeue(message.Id);
+                }
+                
+                await Task.Delay(TimeSpan.FromSeconds(1));
+            }
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await _timer.DisposeAsync();
         }
     }
 }

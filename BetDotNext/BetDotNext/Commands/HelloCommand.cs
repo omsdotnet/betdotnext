@@ -6,13 +6,13 @@ namespace BetDotNext.Commands
     {
         internal const string Command = "start";
         
-        public int UserId { get; }
+        public long ChatId { get; }
         public int MessageId { get; }
         public string UserName { get; }
         
-        public HelloCommand(int userId, int messageId, string userName)
+        public HelloCommand(long chatId, int messageId, string userName)
         {
-            UserId = userId;
+            ChatId = chatId;
             MessageId = messageId;
             UserName = userName;
         }
