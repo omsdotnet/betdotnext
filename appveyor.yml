@@ -15,7 +15,7 @@ install:
   - sudo docker-compose --version
 
 build_script:
-  - docker-compose up --build --no-start
+  - docker-compose up --build --no-start web
 
 deploy_script:
   - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
