@@ -5,5 +5,13 @@ services:
       context: .
       dockerfile: Dockerfile
     image: peresadaoleg/olegperesada:coreapp
+    restart: always
     ports:
       - "5000:80"
+  mongo:
+    image: mongo:4.2.0-bionic
+    restart: always
+    volumes:
+      - ~/data/db:/data/db:rw
+    ports:
+      - "28017:27017"
