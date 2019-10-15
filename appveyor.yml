@@ -1,0 +1,22 @@
+version: 1.0.{build}
+image: Ubuntu
+
+environment:
+  DOCKER_USER:
+    secure: 04T1JyfyhfcvC1+4KIJg4A==
+  DOCKER_PASS:
+    secure: T5atRDJZWwSIN1388pnTqw==
+
+install:
+  - docker version
+  - sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+  - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  - sudo docker-compose --version
+
+build_script:
+  - docker-compose up --build --no-start
+
+deploy_script:
+  - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
+  - docker-compose push
