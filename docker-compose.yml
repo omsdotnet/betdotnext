@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: peresadaoleg/olegperesada:coreapp
+    image: peresadaoleg/olegperesada:bot-${APPVEYOR_BUILD_VERSION}
     restart: always
     ports:
       - "5000:80"
