@@ -39,10 +39,9 @@ namespace BetDotNext
             services.AddSingleton<BetService>();
             services.AddSingleton<QueueMessagesService>();
             services.AddSingleton<ActiveCommandService>();
-
-            services.AddHostedService<BetToTelegramService>();
-
             services.AddSingleton<UserRepository>();
+            
+            services.AddHostedService<BetToTelegramService>();
             
             services.AddMediatR(Assembly.GetExecutingAssembly());
         }
