@@ -3,7 +3,7 @@ services:
   web:
     environment:
       - MONGO=${MONGO}
-      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TelegramToken=${TELEGRAM}:${TELEGRAM_TOKEN}
       - DB=${DB}
       - DBUSER=${DBUSER}
       - DBPASSOWRD=${DBPASSOWRD}
