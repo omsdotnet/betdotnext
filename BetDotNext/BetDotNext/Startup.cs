@@ -30,7 +30,7 @@ namespace BetDotNext
             var connection = _configuration["Mongo"];
             var database = _configuration["DB"];
 
-            var telegramToken = _configuration["TelegramToken"];
+            var telegramToken = _configuration["TELEGRAM_TOKEN"];
 
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
             services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
