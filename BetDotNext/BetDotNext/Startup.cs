@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using BetDotNext.Data;
 using BetDotNext.Services;
@@ -30,7 +31,7 @@ namespace BetDotNext
             var connection = _configuration["Mongo"];
             var database = _configuration["DB"];
 
-            var telegramToken = _configuration["TELEGRAM_TOKEN"];
+            var telegramToken = Environment.GetEnvironmentVariable("TELEGRAM_TOKEN");
 
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
             services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
