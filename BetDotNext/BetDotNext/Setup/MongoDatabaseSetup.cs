@@ -28,10 +28,7 @@ namespace BetDotNext.Setup
             try
             {
                 var userIndexModel = new CreateIndexModel<User>(
-                    Builders<User>.IndexKeys.Ascending(x => x.Id), optionsUnique);
-                
-                var userIdIndexModel = new CreateIndexModel<User>(
-                    Builders<User>.IndexKeys.Ascending(x => x.UserId), optionsBackground);
+                    Builders<User>.IndexKeys.Ascending(x => x.UserId), optionsUnique);
                 
                 var queueIdIndexModel = new CreateIndexModel<MessageQueue>(
                     Builders<MessageQueue>.IndexKeys.Ascending(x => x.Id), optionsUnique);
@@ -39,7 +36,7 @@ namespace BetDotNext.Setup
                 var queueStartTimeIndex = new CreateIndexModel<MessageQueue>(
                     Builders<MessageQueue>.IndexKeys.Ascending(x => x.StartTime), optionsBackground);
                 
-                users.Indexes.CreateMany(new [] { userIndexModel, userIdIndexModel });
+                users.Indexes.CreateOne(userIndexModel);
                 queue.Indexes.CreateMany(new[] { queueIdIndexModel, queueStartTimeIndex });
             }
             catch (Exception ex)

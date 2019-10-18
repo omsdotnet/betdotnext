@@ -30,12 +30,6 @@ namespace BetDotNext
         {
             var connection = _configuration["Mongo"];
             var database = _configuration["DB"];
-
-            foreach (var item in Environment.GetEnvironmentVariables().Keys)
-            {
-                Console.WriteLine(item);
-            }
-            
             var telegramToken = _configuration["TelegramToken"];
 
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
