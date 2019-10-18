@@ -1,3 +1,4 @@
+using System.IO;
 using BetDotNext.Data;
 using BetDotNext.Services;
 using BetDotNext.Setup;
@@ -17,9 +18,8 @@ namespace BetDotNext
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
                 .AddEnvironmentVariables();
 
             _configuration = builder.Build();
