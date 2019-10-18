@@ -31,7 +31,7 @@ namespace BetDotNext.Setup
                     Builders<User>.IndexKeys.Ascending(x => x.UserId), optionsUnique);
                 
                 var queueIdIndexModel = new CreateIndexModel<MessageQueue>(
-                    Builders<MessageQueue>.IndexKeys.Ascending(x => x.Id), optionsUnique);
+                    Builders<MessageQueue>.IndexKeys.Ascending(x => x.ChatId), optionsUnique);
                 
                 var queueStartTimeIndex = new CreateIndexModel<MessageQueue>(
                     Builders<MessageQueue>.IndexKeys.Ascending(x => x.StartTime), optionsBackground);
