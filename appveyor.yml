@@ -6,6 +6,12 @@ environment:
     secure: 04T1JyfyhfcvC1+4KIJg4A==
   DOCKER_PASS:
     secure: T5atRDJZWwSIN1388pnTqw==
+  DB:
+    secure: dpMsp0sxqp56JDsafOYE6Q==
+  TELEGRAM_TOKEN:
+    secure: fr7z8650W3SjSj4r0uOTplAZ2KspCvoOB2CV7KArz599+bf49H8aHXC7moOeoJJW
+  MONGO:
+    secure: HgWma38Y33mMGIgQXfkzNbnEFgP4YPrUg8AT636YLWM=
 
 install:
   - docker version

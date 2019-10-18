@@ -6,8 +6,16 @@ services:
       dockerfile: Dockerfile
     image: peresadaoleg/olegperesada:${APPVEYOR_BUILD_VERSION}-bot
     restart: always
+    environment:
+      - MONGO=${MONGO}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - DB=${DB}
+      - DBUSER=${DBUSER}
+      - DBPASSOWRD=${DBPASSOWRD}
     ports:
       - "5000:80"
+    depends_on:
+      - mongo
   mongo:
     image: mongo:4.2.0-bionic
     restart: always
