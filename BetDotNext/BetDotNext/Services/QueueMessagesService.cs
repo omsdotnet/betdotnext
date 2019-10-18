@@ -12,11 +12,11 @@ namespace BetDotNext.Services
     {
         private readonly IMongoCollection<MessageQueue> _messageQueue;
 
-        public QueueMessagesService(IMongoCollection<MessageQueue> messageQueue)
+        public QueueMessagesService(IMongoDatabase mongoDatabase)
         {
-            Ensure.NotNull(messageQueue, nameof(messageQueue));
+            Ensure.NotNull(mongoDatabase, nameof(mongoDatabase));
             
-            _messageQueue = messageQueue;
+            _messageQueue = mongoDatabase.GetCollection<MessageQueue>("QueueMessage");
         }
 
         public void Enqueue(MessageQueue messageQueue)

@@ -1,12 +1,6 @@
 version: "3"
 services:
   web:
-    environment:
-      - MONGO=${MONGO}
-      - TelegramToken=${TELEGRAM}:${TELEGRAM_TOKEN}
-      - DB=${DB}
-      - DBUSER=${DBUSER}
-      - DBPASSOWRD=${DBPASSOWRD}
     build:
       context: .
       dockerfile: Dockerfile
