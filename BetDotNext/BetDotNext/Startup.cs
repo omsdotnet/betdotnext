@@ -1,8 +1,9 @@
-using System;
 using System.IO;
+using System.Reflection;
 using BetDotNext.Data;
 using BetDotNext.Services;
 using BetDotNext.Setup;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +43,8 @@ namespace BetDotNext
             services.AddHostedService<BetToTelegramService>();
 
             services.AddSingleton<UserRepository>();
+            
+            services.AddMediatR(Assembly.GetExecutingAssembly());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, BetService betService)
