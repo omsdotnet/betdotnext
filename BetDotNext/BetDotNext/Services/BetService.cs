@@ -4,6 +4,7 @@ using BetDotNext.Data;
 using BetDotNext.Utils;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Exceptions;
@@ -71,6 +72,8 @@ namespace BetDotNext.Services
         private void OnMessageReceive(object sender, MessageEventArgs args)
         {
             Message message = args.Message;
+            _logger.LogInformation(message.ToJson());
+
             if (message?.Chat == null)
             {
                 return;

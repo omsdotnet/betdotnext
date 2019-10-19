@@ -7,10 +7,12 @@ using Telegram.Bot;
 
 namespace BetDotNext.Services
 {
-  internal class BetToTelegramService : BackgroundService
+  internal class BetToTelegramService : IHostedService
   {
     private readonly QueueMessagesService _queueMessagesService;
     private readonly ITelegramBotClient _telegramBotClient;
+
+    private Timer _queueTimer;
 
     public BetToTelegramService(QueueMessagesService queueMessagesService, ITelegramBotClient telegramBotClient)
     {
@@ -21,18 +23,26 @@ namespace BetDotNext.Services
       _telegramBotClient = telegramBotClient;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    private async void OnExecuteQueueMessages(object state)
     {
-      while (!stoppingToken.IsCancellationRequested)
+      foreach (var message in _queueMessagesService.TopMessages(30))
       {
-        foreach (var message in _queueMessagesService.TopMessages(30))
-        {
-          await _telegramBotClient.SendTextMessageAsync(0, message.Text, cancellationToken: stoppingToken);
-          _queueMessagesService.Dequeue(message.Id);
-        }
-
-        await Task.Delay(TimeSpan.FromSeconds(1.5), stoppingToken);
+        await _telegramBotClient.SendTextMessageAsync(0, message.Text);
+        _queueMessagesService.Dequeue(message.Id);
       }
+
+      await Task.Delay(TimeSpan.FromSeconds(1.5));
+    }
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+      _queueTimer = new Timer(OnExecuteQueueMessages, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+      return Task.CompletedTask;
+    }
+
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+      await _queueTimer.DisposeAsync();
     }
   }
 }
