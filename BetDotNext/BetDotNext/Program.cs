@@ -44,7 +44,7 @@ namespace BetDotNext
 
             services.AddSingleton<BetService>();
             //services.AddSingleton<QueueMessagesService>();
-            //services.AddSingleton<ActiveCommandService>();
+            services.AddSingleton<ActiveCommandService>();
             //services.AddSingleton<UserRepository>();
 
             //services.AddHostedService<BetToTelegramService>();
