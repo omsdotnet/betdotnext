@@ -29,9 +29,9 @@ namespace BetDotNext
 
     public void ConfigureServices(IServiceCollection services)
     {
-      var connection = _configuration["Mongo"] ?? "mongodb://139.59.34.208:28017";
-      var database = _configuration["DB"] ?? "test";
-      var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAEluJ1V_SbMuUwzyqUBqa5wzoVgTbka4_g";
+      var connection = _configuration["Mongo"];
+      var database = _configuration["DB"];
+      var telegramToken = _configuration["TelegramToken"];
 
       services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
       services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
