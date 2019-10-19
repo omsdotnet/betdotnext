@@ -86,7 +86,7 @@ namespace BetDotNext.Services
 
             if (user == null)
             {
-                _telegramBotClient.SendTextMessageAsync(message.Chat.Id, "Test Message").Wait();
+                _telegramBotClient.SendTextMessageAsync(message.Chat, "Test Message").Wait();
                 // _mediator.Send(new HelloCommand(chatId, message.MessageId, message.From.Username));
                 return;
             }
