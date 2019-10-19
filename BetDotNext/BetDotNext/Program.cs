@@ -49,7 +49,7 @@ namespace BetDotNext
 
             //services.AddHostedService<BetToTelegramService>();
 
-            //services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatR(Assembly.GetExecutingAssembly());
           }).Configure(app =>
           {
             app.ApplicationServices.GetRequiredService<BetService>().Start();
