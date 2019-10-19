@@ -39,17 +39,17 @@ namespace BetDotNext
             var database = _configuration["DB"];
             var telegramToken = _configuration["TelegramToken"];
 
-            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
-            services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
+           services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
+            //services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
 
             services.AddSingleton<BetService>();
-            services.AddSingleton<QueueMessagesService>();
-            services.AddSingleton<ActiveCommandService>();
-            services.AddSingleton<UserRepository>();
+            //services.AddSingleton<QueueMessagesService>();
+            //services.AddSingleton<ActiveCommandService>();
+            //services.AddSingleton<UserRepository>();
 
-            services.AddHostedService<BetToTelegramService>();
+            //services.AddHostedService<BetToTelegramService>();
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            //services.AddMediatR(Assembly.GetExecutingAssembly());
           }).Configure(app =>
           {
             app.ApplicationServices.GetRequiredService<BetService>().Start();

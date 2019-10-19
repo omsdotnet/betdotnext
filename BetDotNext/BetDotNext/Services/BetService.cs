@@ -15,22 +15,23 @@ namespace BetDotNext.Services
     public class BetService
     {
         private readonly ITelegramBotClient _telegramBotClient;
-        private readonly UserRepository _userRepository;
+        //private readonly UserRepository _userRepository;
         private readonly ILogger<BetService> _logger;
         private readonly IMediator _mediator;
         private readonly ActiveCommandService _activeCommandService;
         
-        public BetService(ITelegramBotClient telegramBotClient, UserRepository userRepository,
+        public BetService(ITelegramBotClient telegramBotClient, 
+          // UserRepository userRepository,
             ILogger<BetService> logger, IMediator mediator, ActiveCommandService activeCommandService)
         {
             Ensure.NotNull(telegramBotClient, nameof(telegramBotClient));
-            Ensure.NotNull(userRepository, nameof(userRepository));
+            //Ensure.NotNull(userRepository, nameof(userRepository));
             Ensure.NotNull(logger, nameof(logger));
             Ensure.NotNull(mediator, nameof(mediator));
             Ensure.NotNull(activeCommandService, nameof(activeCommandService));
 
             _telegramBotClient = telegramBotClient;
-            _userRepository = userRepository;
+            //_userRepository = userRepository;
             _logger = logger;
             _mediator = mediator;
             _activeCommandService = activeCommandService;
@@ -85,7 +86,7 @@ namespace BetDotNext.Services
         private void MessageHandler(Message message)
         {
             var chatId = message.Chat.Id;
-            var user = _userRepository.GetUserByChatId(chatId);
+            var user = (string) null;
 
             if (user == null)
             {
