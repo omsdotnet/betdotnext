@@ -6,13 +6,11 @@ namespace BetDotNext.Setup
 {
     public static class MongoDatabaseSetup
     {
-        private const string QueueMessage = "QueueMessage";
-        private const string Users = "Users";
-        
         public static IMongoDatabase MongoDbInit(this IMongoDatabase mongoDatabase)
         {
-            var queue = mongoDatabase.GetCollection<MessageQueue>(QueueMessage);
-            var users = mongoDatabase.GetCollection<User>(Users);
+            var queue = mongoDatabase.GetCollection<MessageQueue>(typeof(MessageQueue).Name);
+            var users = mongoDatabase.GetCollection<User>(typeof(User).Name);
+            var conversation = mongoDatabase.GetCollection<Conversation>(typeof(Conversation).Name);
             
             var optionsUnique = new CreateIndexOptions
             {
@@ -31,13 +29,17 @@ namespace BetDotNext.Setup
                     Builders<User>.IndexKeys.Ascending(x => x.UserId), optionsUnique);
                 
                 var queueIdIndexModel = new CreateIndexModel<MessageQueue>(
-                    Builders<MessageQueue>.IndexKeys.Ascending(x => x.ChatId), optionsUnique);
+                    Builders<MessageQueue>.IndexKeys.Ascending(x => x.Chat.Id), optionsUnique);
                 
                 var queueStartTimeIndex = new CreateIndexModel<MessageQueue>(
                     Builders<MessageQueue>.IndexKeys.Ascending(x => x.StartTime), optionsBackground);
+
+                var conversationIndex = new CreateIndexModel<Conversation>(
+                  Builders<Conversation>.IndexKeys.Ascending(x => x.Chat.Id), optionsUnique);
                 
                 users.Indexes.CreateOne(userIndexModel);
                 queue.Indexes.CreateMany(new[] { queueIdIndexModel, queueStartTimeIndex });
+                conversation.Indexes.CreateOne(conversationIndex);
             }
             catch (Exception ex)
             {

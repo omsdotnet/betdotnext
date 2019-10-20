@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetDotNext", "BetDotNext\BetDotNext.csproj", "{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29403.142
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetDotNext", "BetDotNext\BetDotNext.csproj", "{AB73F0EA-7BFD-473B-8A73-E657F9F8541E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetDotNext.Tests", "BetDotNext.Tests\BetDotNext.Tests.csproj", "{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetDotNext.Tests", "BetDotNext.Tests\BetDotNext.Tests.csproj", "{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +21,11 @@ Global
 		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEF0BB8C-8BEA-49CA-963C-7A24E71650F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD6EEB1C-2BC5-4A0A-99B1-45F55EC0632F}
 	EndGlobalSection
 EndGlobal

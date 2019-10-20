@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Reflection;
-using BetDotNext.Data;
+using BetDotNext.Commands;
+using BetDotNext.ExternalServices;
 using BetDotNext.Services;
 using BetDotNext.Setup;
 using MediatR;
@@ -35,21 +37,31 @@ namespace BetDotNext
         {
           webBuilder.ConfigureServices(services =>
           {
-            var connection = _configuration["Mongo"];
-            var database = _configuration["DB"];
-            var telegramToken = _configuration["TelegramToken"];
+            var connection = _configuration["Mongo"] ?? "mongodb://192.168.168.131:28017";
+            var database = _configuration["DB"] ?? "p";
+            var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAEluJ1V_SbMuUwzyqUBqa5wzoVgTbka4_g";
 
-           services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
-            //services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
+            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
+            services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
 
             services.AddSingleton<BetService>();
-            //services.AddSingleton<QueueMessagesService>();
-            services.AddSingleton<ActiveCommandService>();
-            //services.AddSingleton<UserRepository>();
+            services.AddSingleton<QueueMessagesService>();
+            services.AddSingleton<ConversationService>();
 
-            //services.AddHostedService<BetToTelegramService>();
+            services.AddHostedService<BetToTelegramService>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            services.AddSingleton<BotCommandService>();
+            services.AddSingleton<StartCommand>();
+            services.AddSingleton<BetCommand>();
+            services.AddSingleton<RemoveBetCommand>();
+
+            services.AddHttpClient<BetPlatformService>(client =>
+            {
+              client.BaseAddress = new Uri("http://bookmakerboard.azurewebsites.net/");
+            });
+
           }).Configure(app =>
           {
             app.ApplicationServices.GetRequiredService<BetService>().Start();

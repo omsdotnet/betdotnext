@@ -13,7 +13,7 @@ namespace BetDotNext.Models
         public string Text { get; set; }
         public DateTime StartTime { get; set; }
         public int MessageId { get; set; }
-        public ChatId ChatId { get; set; }
+        public Chat Chat { get; set; }
         public IReplyMarkup ReplyMarkup { get; set; }
     }
 }
