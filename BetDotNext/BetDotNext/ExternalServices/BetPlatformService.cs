@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using BetDotNext.Utils;
 
 namespace BetDotNext.ExternalServices
@@ -26,6 +25,9 @@ namespace BetDotNext.ExternalServices
       return result.IsSuccessStatusCode;
     }
 
-
+    public Task CreateBetAsync(string speaker, string rate, string category)
+    {
+      return Task.CompletedTask;
+    }
   }
 }
