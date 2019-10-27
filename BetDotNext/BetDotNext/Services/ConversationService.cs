@@ -21,9 +21,18 @@ namespace BetDotNext.Services
       return _conversation.Find(filterByChatId).FirstOrDefault();
     }
 
-    public void NewConversation(Conversation conversation)
+    public void CreateAndUpdateConversation(Conversation conversation)
     {
-      _conversation.InsertOne(conversation);
+      if (GetConversationByChatId(conversation.Chat.Id) == null)
+      {
+        _conversation.InsertOne(conversation);
+      }
+      else
+      {
+        var filterByChatId = Builders<Conversation>.Filter.Eq(p => p.Chat.Id, conversation.Chat.Id);
+        var update = Builders<Conversation>.Update.Set(p => p.Command, conversation.Command);
+        _conversation.UpdateOne(filterByChatId, update);
+      }
     }
 
     public void DeleteConversation(long chatId)

@@ -1,5 +1,5 @@
 using System;
-using BetDotNext.Commands;
+using BetDotNext.BotPlatform;
 using BetDotNext.Utils;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
@@ -13,19 +13,18 @@ namespace BetDotNext.Services
   {
     private readonly ITelegramBotClient _telegramBotClient;
     private readonly ILogger<BetService> _logger;
-    private readonly BotCommandService _botCommandService;
+    private readonly IBot _bot;
 
     public BetService(ITelegramBotClient telegramBotClient,
-      ILogger<BetService> logger,
-      BotCommandService botCommandService)
+      ILogger<BetService> logger, IBot bot)
     {
       Ensure.NotNull(telegramBotClient, nameof(telegramBotClient));
       Ensure.NotNull(logger, nameof(logger));
-      Ensure.NotNull(botCommandService, nameof(botCommandService));
+      Ensure.NotNull(bot, nameof(bot));
 
       _telegramBotClient = telegramBotClient;
       _logger = logger;
-      _botCommandService = botCommandService;
+      _bot = bot;
     }
 
     public void Start()
@@ -74,11 +73,13 @@ namespace BetDotNext.Services
 
     private async void MessageHandler(Message message)
     {
-      var chatId = message.Chat.Id;
-      CommandBase commandBase = _botCommandService.GetCommand(message);
-      if (commandBase != null)
+      try
       {
-        await commandBase.ExecuteAsync(message);
+        await _bot.StartDialogAsync(message);
+      }
+      catch (Exception ex)
+      {
+        _logger.LogCritical("The message cannot be processed. {0}", ex.Message);
       }
     }
   }

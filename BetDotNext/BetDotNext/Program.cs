@@ -1,11 +1,12 @@
 using System;
 using System.IO;
-using System.Reflection;
-using BetDotNext.Commands;
+using BetDotNext.Activity;
+using BetDotNext.Activity.Bet;
+using BetDotNext.BotPlatform;
+using BetDotNext.BotPlatform.Impl;
 using BetDotNext.ExternalServices;
 using BetDotNext.Services;
 using BetDotNext.Setup;
-using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,8 +39,8 @@ namespace BetDotNext
           webBuilder.ConfigureServices(services =>
           {
             var connection = _configuration["Mongo"] ?? "mongodb://192.168.168.131:28017";
-            var database = _configuration["DB"] ?? "p";
-            var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAEluJ1V_SbMuUwzyqUBqa5wzoVgTbka4_g";
+            var database = _configuration["DB"] ?? "zx";
+            var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAFdo1oRuERSg-CEtoik5D198BrRV2gPrtM";
 
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
             services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
@@ -50,20 +51,24 @@ namespace BetDotNext
 
             services.AddHostedService<BetToTelegramService>();
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-
-            services.AddSingleton<BotCommandService>();
-            services.AddSingleton<StartCommand>();
-            services.AddSingleton<BetCommand>();
-            services.AddSingleton<RemoveBetCommand>();
-
             services.AddHttpClient<BetPlatformService>(client =>
             {
               client.BaseAddress = new Uri("http://bookmakerboard.azurewebsites.net/");
             });
 
+            services.AddSingleton<IBotStorage, BotStorageInMemory>();
+            services.AddSingleton<IBot, Bot>();
+            services.AddSingleton<BetActivity>();
+            services.AddSingleton<StartActivity>();
+            services.AddSingleton<RemoveBetActivity>();
+
           }).Configure(app =>
           {
+            app.ApplicationServices.GetRequiredService<IBot>()
+              .AddActivity("/start", typeof(StartActivity))
+              .AddActivity("/bet", typeof(BetActivity))
+              .AddActivity("/removebet", typeof(RemoveBetActivity));
+
             app.ApplicationServices.GetRequiredService<BetService>().Start();
           });
         });
