@@ -41,7 +41,7 @@ namespace BetDotNext.Services
         }
         catch (Exception ex)
         {
-          _logger.LogError(ex.Message);
+          _logger.LogError(ex, "Error when send a message.");
         }
         finally
         {

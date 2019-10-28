@@ -183,5 +183,12 @@ namespace BetDotNext.ExternalServices
 
       return _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
     }
+
+    public Task DeleteRateForBet(CreateBet bet)
+    {
+      bool isSpeaker = !string.IsNullOrEmpty(bet.Speaker);
+
+      return Task.CompletedTask;
+    }
   }
 }
