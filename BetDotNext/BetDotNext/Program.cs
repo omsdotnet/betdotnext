@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Http;
 using BetDotNext.Activity;
 using BetDotNext.Activity.Bet;
 using BetDotNext.BotPlatform;
@@ -42,7 +43,12 @@ namespace BetDotNext
             var database = _configuration["DB"] ?? "zx";
             var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAFdo1oRuERSg-CEtoik5D198BrRV2gPrtM";
 
-            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken));
+            var handler = new HttpClientHandler
+            {
+              ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
+            };
+
+            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(telegramToken, new HttpClient(handler)));
             services.AddSingleton(_ => new MongoClient(connection).GetDatabase(database).MongoDbInit());
 
             services.AddSingleton<BetService>();
