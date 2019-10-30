@@ -28,14 +28,6 @@ namespace BetDotNext
     {
       try
       {
-        Log.Logger = new LoggerConfiguration()
-          .MinimumLevel.Debug()
-          .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-          .Enrich.FromLogContext()
-          .WriteTo.Console()
-          .WriteTo.Seq("http://192.168.168.131:4000")
-          .CreateLogger();
-
         CreateHostBuilder(args).Build().Run();
       }
       catch (Exception ex)
@@ -105,9 +97,16 @@ namespace BetDotNext
           }).UseSerilog();
         });
 
-    private static void ConfigureLogging(HostBuilderContext arg1, ILoggingBuilder arg2)
+    private static void ConfigureLogging(HostBuilderContext builder, ILoggingBuilder loggingBuilder)
     {
-      var host = arg1.Configuration["hot"];
+      var seqHost = builder.Configuration["SEQ_PORT"];
+      Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.Seq(seqHost)
+        .CreateLogger();
     }
   }
 }
