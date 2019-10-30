@@ -131,13 +131,13 @@ namespace BetDotNext.ExternalServices
       }
 
       var rideId = _rides.SingleOrDefault(x => x.Number == bet.Ride)?.Id;
-      if (rideId == null)
+      if (!rideId.HasValue)
       {
         _logger.LogError("Not found ride");
         return null;
       }
 
-      var ride = await GetRide(bet.Ride);
+      var ride = await GetRide(rideId.Value);
       var rate = ride.Rates.SingleOrDefault(x => x.Bidder.Id == bidder.Id && x.Team == speaker.Id);
       if (bet.Rate == 0)
       {

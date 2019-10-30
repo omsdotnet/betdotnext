@@ -44,13 +44,13 @@ namespace BetDotNext.Activity.Bet
 
       var speaker = parts[0].Trim();
       var rate = parts[1].Trim();
-      var ride = parts[2].Trim();
+      var ride = NormalizeRideValue(parts[2]);
 
       var fail = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.FailCreatedActivityMessage };
 
       try
       {
-        var bet = new CreateBet {  Rate = uint.Parse(rate), Ride = uint.Parse(ride), Speaker = speaker, Bidder = bidder };
+        var bet = new CreateBet {  Rate = uint.Parse(rate), Ride = ride, Speaker = speaker, Bidder = bidder };
         var currentScore = await _betPlatformService.CreateBetAsync(bet);
         if (!currentScore.HasValue)
         {
@@ -69,6 +69,18 @@ namespace BetDotNext.Activity.Bet
         _queueMessagesService.Enqueue(fail);
         return false;
       }
+    }
+
+    private uint NormalizeRideValue(string rideValue)
+    {
+      var rideNumber = rideValue
+        .Trim()
+        .ToLower()
+        .Replace("top3", "11")
+        .Replace("top5", "12")
+        .Replace("top10", "13");
+
+      return uint.Parse(rideNumber);
     }
   }
 }
