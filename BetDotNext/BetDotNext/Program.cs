@@ -12,7 +12,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using Serilog;
+using Serilog.Events;
 using Telegram.Bot;
 
 namespace BetDotNext
@@ -21,9 +24,23 @@ namespace BetDotNext
   {
     private static IConfiguration _configuration;
 
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
-      CreateHostBuilder(args).Build().Run();
+      try
+      {
+        CreateHostBuilder(args).Build().Run();
+      }
+      catch (Exception ex)
+      {
+        Log.Fatal(ex, "Host terminated unexpectedly");
+        return 1;
+      }
+      finally
+      {
+        Log.CloseAndFlush();
+      }
+
+      return 0;
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -35,13 +52,22 @@ namespace BetDotNext
             .AddEnvironmentVariables();
 
           _configuration = builder.Build();
+
+          var seqHost = _configuration["SEQ_HOST"];
+          Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .WriteTo.Seq(seqHost)
+            .CreateLogger();
         }).ConfigureWebHostDefaults(webBuilder =>
         {
           webBuilder.ConfigureServices(services =>
           {
             var connection = _configuration["Mongo"] ?? "mongodb://192.168.168.131:28017";
             var database = _configuration["DB"] ?? "zx";
-            var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAFdo1oRuERSg-CEtoik5D198BrRV2gPrtM";
+            var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAErpzzU1A1LtArae57jrvYJbtXWAKR087M";
 
             var handler = new HttpClientHandler
             {
@@ -76,7 +102,7 @@ namespace BetDotNext
               .AddActivity("/removebet", typeof(RemoveBetActivity));
 
             app.ApplicationServices.GetRequiredService<BetService>().Start();
-          });
+          }).UseSerilog();
         });
   }
 }

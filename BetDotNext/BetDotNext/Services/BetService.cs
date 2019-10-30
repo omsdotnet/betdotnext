@@ -31,6 +31,8 @@ namespace BetDotNext.Services
     {
       try
       {
+        _logger.LogDebug("Bot Started");
+
         if (_telegramBotClient.IsReceiving)
         {
           return;
