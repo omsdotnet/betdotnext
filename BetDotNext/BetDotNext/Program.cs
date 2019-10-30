@@ -97,9 +97,9 @@ namespace BetDotNext
           }).UseSerilog();
         });
 
-    private static void ConfigureLogging(HostBuilderContext builder, ILoggingBuilder loggingBuilder)
+    private static void ConfigureLogging(HostBuilderContext arg1, ILoggingBuilder arg2)
     {
-      var seqHost = builder.Configuration["SEQ_PORT"];
+      var seqHost = arg1.Configuration["SEQ_HOST"];
       Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Debug()
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
