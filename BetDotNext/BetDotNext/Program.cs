@@ -45,7 +45,6 @@ namespace BetDotNext
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
       Host.CreateDefaultBuilder(args)
-        .ConfigureLogging(ConfigureLogging)
         .ConfigureAppConfiguration((hostingContext, builder) =>
         {
           builder.SetBasePath(Directory.GetCurrentDirectory())
@@ -53,6 +52,15 @@ namespace BetDotNext
             .AddEnvironmentVariables();
 
           _configuration = builder.Build();
+
+          var seqHost = _configuration["SEQ_HOST"];
+          Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .WriteTo.Seq(seqHost)
+            .CreateLogger();
         }).ConfigureWebHostDefaults(webBuilder =>
         {
           webBuilder.ConfigureServices(services =>
@@ -96,17 +104,5 @@ namespace BetDotNext
             app.ApplicationServices.GetRequiredService<BetService>().Start();
           }).UseSerilog();
         });
-
-    private static void ConfigureLogging(HostBuilderContext arg1, ILoggingBuilder arg2)
-    {
-      var seqHost = arg1.Configuration["SEQ_HOST"];
-      Log.Logger = new LoggerConfiguration()
-        .MinimumLevel.Debug()
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-        .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .WriteTo.Seq(seqHost)
-        .CreateLogger();
-    }
   }
 }
