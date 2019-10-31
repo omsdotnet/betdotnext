@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Serilog;
 using Serilog.Events;
@@ -90,6 +89,7 @@ namespace BetDotNext
 
             services.AddSingleton<IBotStorage, BotStorageInMemory>();
             services.AddSingleton<IBot, Bot>();
+            services.AddSingleton<IBotMediator, BotMediator>();
             services.AddSingleton<BetActivity>();
             services.AddSingleton<StartActivity>();
             services.AddSingleton<RemoveBetActivity>();

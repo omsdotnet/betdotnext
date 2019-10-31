@@ -14,8 +14,8 @@ namespace BetDotNext.Activity.Bet
     private readonly QueueMessagesService _queueMessagesService;
     private readonly BetPlatformService _betPlatformService;
 
-    public ConfirmRemoveBetActivity(IBotStorage botStorage, QueueMessagesService queueMessagesService,
-      BetPlatformService betPlatformService) : base(botStorage)
+    public ConfirmRemoveBetActivity(IBotStorage botStorage, IBotMediator mediator, QueueMessagesService queueMessagesService,
+      BetPlatformService betPlatformService) : base(botStorage, mediator)
     {
       _queueMessagesService = queueMessagesService;
       _betPlatformService = betPlatformService;

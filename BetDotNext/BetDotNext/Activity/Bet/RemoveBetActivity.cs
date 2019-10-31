@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using BetDotNext.BotPlatform;
 using BetDotNext.BotPlatform.Impl;
-using BetDotNext.ExternalServices;
 using BetDotNext.Models;
 using BetDotNext.Services;
 using Telegram.Bot.Types;
@@ -12,18 +11,16 @@ namespace BetDotNext.Activity.Bet
   public class RemoveBetActivity : BotActivityBase
   {
     private readonly QueueMessagesService _queueMessagesService;
-    private readonly BetPlatformService _betPlatformService;
 
-    public RemoveBetActivity(IBotStorage botStorage, QueueMessagesService queueMessagesService,
-      BetPlatformService betPlatformService) : base(botStorage)
+    public RemoveBetActivity(IBotStorage botStorage, IBotMediator mediator, 
+      QueueMessagesService queueMessagesService) : base(botStorage, mediator)
     {
       _queueMessagesService = queueMessagesService;
-      _betPlatformService = betPlatformService;
     }
 
     public override BotActivityBase SelectActivity<T>(Message message, T context)
     {
-      return new ConfirmRemoveBetActivity(BotStorage, _queueMessagesService, _betPlatformService);
+      return GetActivity<ConfirmRemoveBetActivity>();
     }
 
     public override Task<bool> CurrentExecuteAsync<T>(Message message, T context)

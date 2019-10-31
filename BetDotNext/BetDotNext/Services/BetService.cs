@@ -31,8 +31,7 @@ namespace BetDotNext.Services
     {
       try
       {
-        _logger.LogDebug("Bot Started");
-
+        _logger.LogInformation("Bot Started");
         if (_telegramBotClient.IsReceiving)
         {
           return;
@@ -52,6 +51,7 @@ namespace BetDotNext.Services
     {
       try
       {
+        _logger.LogInformation("Bot Stopped");
         _telegramBotClient.OnMessage -= OnMessageReceive;
         _telegramBotClient.StopReceiving();
       }
@@ -77,6 +77,11 @@ namespace BetDotNext.Services
     {
       try
       {
+        string user = !string.IsNullOrEmpty(message.Chat.Username) ?
+          message.Chat.Username :
+          $"{message.Chat.LastName} {message.Chat.FirstName}";
+
+        _logger.LogInformation("Received message from a chat {0} a user {1}", message.Chat.Id, user);
         await _bot.StartDialogAsync(message);
       }
       catch (Exception ex)

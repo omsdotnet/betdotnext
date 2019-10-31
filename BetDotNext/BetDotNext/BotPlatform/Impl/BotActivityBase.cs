@@ -6,11 +6,15 @@ namespace BetDotNext.BotPlatform.Impl
   public abstract class BotActivityBase
   {
     protected IBotStorage BotStorage { get; }
+    private readonly IBotMediator _mediator;
 
-    protected BotActivityBase(IBotStorage botStorage)
+    protected BotActivityBase(IBotStorage botStorage, IBotMediator mediator)
     {
       BotStorage = botStorage;
+      _mediator = mediator;
     }
+
+    protected T GetActivity<T>() where T : class => _mediator.GetActivity<T>();
 
     public virtual async Task ExecuteConversationAsync<T>(Message message, T context) where T : BotContext
     {

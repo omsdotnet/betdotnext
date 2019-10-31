@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using BetDotNext.BotPlatform;
 using BetDotNext.BotPlatform.Impl;
-using BetDotNext.ExternalServices;
 using BetDotNext.Models;
 using BetDotNext.Services;
 using Telegram.Bot.Types;
@@ -12,18 +11,16 @@ namespace BetDotNext.Activity.Bet
   public class BetActivity : BotActivityBase
   {
     private readonly QueueMessagesService _queueMessagesService;
-    private readonly BetPlatformService _betPlatformService;
 
-    public BetActivity(IBotStorage botStorage, QueueMessagesService queueMessagesService, 
-      BetPlatformService betPlatformService) : base(botStorage)
+    public BetActivity(IBotStorage botStorage, IBotMediator mediator, 
+      QueueMessagesService queueMessagesService) : base(botStorage, mediator)
     {
       _queueMessagesService = queueMessagesService;
-      _betPlatformService = betPlatformService;
     }
 
     public override BotActivityBase SelectActivity<T>(Message message, T context)
     {
-      return new CreatedBetActivity(BotStorage, _queueMessagesService, _betPlatformService);
+      return GetActivity<CreatedBetActivity>();
     }
 
     public override Task<bool> CurrentExecuteAsync<T>(Message message, T context)

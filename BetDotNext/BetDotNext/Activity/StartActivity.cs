@@ -12,7 +12,8 @@ namespace BetDotNext.Activity
   {
     private readonly QueueMessagesService _queueMessagesService;
 
-    public StartActivity(IBotStorage botStorage, QueueMessagesService queueMessagesService) : base(botStorage)
+    public StartActivity(IBotStorage botStorage, IBotMediator mediator, 
+      QueueMessagesService queueMessagesService) : base(botStorage, mediator)
     {
       _queueMessagesService = queueMessagesService;
     }

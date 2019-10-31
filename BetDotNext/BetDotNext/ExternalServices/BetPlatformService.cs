@@ -115,6 +115,8 @@ namespace BetDotNext.ExternalServices
       var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
       if (bidder == null)
       {
+        _logger.LogDebug("Created new bidder {0}", bet.Bidder);
+
         var bidderId = _bidders.Max(p => p.Id);
         var newBidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
         await AddBidder(newBidder);
