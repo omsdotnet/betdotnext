@@ -30,19 +30,19 @@ namespace BetDotNext.Activity.Bet
 
     public override async Task<bool> CurrentExecuteAsync<T>(Message message, T context)
     {
-      long chatId = message.Chat.Id;
+      var chatId = message.Chat.Id;
 
       string[] parts = message.Text.Split('-', StringSplitOptions.RemoveEmptyEntries);
       if (parts.Length != SegmentLength)
       {
         var err = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.BetActivityUnexpectedFormatMessage };
         _queueMessagesService.Enqueue(err);
-        _logger.LogWarning("Wrong format message from a chat {0}", chatId);
+        _logger.LogWarning("Wrong format message from chat {0}", chatId);
 
         return false;
       }
 
-      _logger.LogInformation("The correct format message from a chat {0}", chatId);
+      _logger.LogInformation("The correct format message from chat {0}", chatId);
 
       var lm = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.LoadingMessage };
       _queueMessagesService.Enqueue(lm);
@@ -63,7 +63,7 @@ namespace BetDotNext.Activity.Bet
         var currentScore = await _betPlatformService.CreateBetAsync(bet);
         if (!currentScore.HasValue)
         {
-          _logger.LogInformation("Fail created bet from a chat {0}", chatId);
+          _logger.LogInformation("Fail created bet from chat {0}", chatId);
           _queueMessagesService.Enqueue(fail);
           return false;
         }
@@ -71,7 +71,7 @@ namespace BetDotNext.Activity.Bet
         var tSuccess = string.Format(StringsResource.SuccessBetActivity, currentScore);
         var success = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = tSuccess };
         _queueMessagesService.Enqueue(success);
-        _logger.LogInformation("Bet successfully created from a chat {0}", chatId);
+        _logger.LogInformation("Bet successfully created from chat {0}", chatId);
 
         return true;
       }

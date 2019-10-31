@@ -90,9 +90,12 @@ namespace BetDotNext
             services.AddSingleton<IBotStorage, BotStorageInMemory>();
             services.AddSingleton<IBot, Bot>();
             services.AddSingleton<IBotMediator, BotMediator>();
+
             services.AddSingleton<BetActivity>();
             services.AddSingleton<StartActivity>();
             services.AddSingleton<RemoveBetActivity>();
+            services.AddSingleton<CreatedBetActivity>();
+            services.AddSingleton<ConfirmRemoveBetActivity>();
 
           }).Configure(app =>
           {
