@@ -10,7 +10,7 @@
                                                                "[спикер]-[ставка]-[номинация] \r\n" +
                                                                "Например:\r\n" +
                                                                "Christophe Nasarre - 300 - 1\r\n" +
-                                                               "Роман Просин - 100 - top1\r\n" +
+                                                               "Роман Просин - 100 - top3\r\n" +
                                                                "tukasz Pyrzyk  - 10 - top10";
 
     public static readonly string LoadingMessage = "Обрабатываю Вашу ставку...";
