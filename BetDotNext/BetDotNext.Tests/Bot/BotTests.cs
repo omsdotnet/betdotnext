@@ -11,26 +11,25 @@ namespace BetDotNext.Tests.Bot
 {
   public class StartConversation : BotActivityBase
   {
-    public StartConversation(IBotStorage botStorage) : base(botStorage)
-    {
-    }
+    
 
     public override BotActivityBase SelectActivity<T>(Message message, T context)
     {
-      return new YesStartConversation(BotStorage);
+      return GetActivity<YesStartConversation>();
     }
 
     public override Task<bool> CurrentExecuteAsync<T>(Message message, T context)
     {
       return Task.FromResult(true);
     }
+
+    public StartConversation(IBotStorage botStorage, IBotMediator mediator) : base(botStorage, mediator)
+    {
+    }
   }
 
   public class YesStartConversation : BotActivityBase
   {
-    public YesStartConversation(IBotStorage botStorage) : base(botStorage)
-    {
-    }
 
     public override BotActivityBase SelectActivity<T>(Message message, T context)
     {
@@ -41,14 +40,14 @@ namespace BetDotNext.Tests.Bot
     {
       return Task.FromResult(true);
     }
+
+    public YesStartConversation(IBotStorage botStorage, IBotMediator mediator) : base(botStorage, mediator)
+    {
+    }
   }
 
   public class NoStartConversation : BotActivityBase
   {
-    public NoStartConversation(IBotStorage botStorage) : base(botStorage)
-    {
-    }
-
     public override BotActivityBase SelectActivity<T>(Message message, T context)
     {
       return null;
@@ -57,6 +56,10 @@ namespace BetDotNext.Tests.Bot
     public override Task<bool> CurrentExecuteAsync<T>(Message message, T context)
     {
       throw new NotImplementedException();
+    }
+
+    public NoStartConversation(IBotStorage botStorage, IBotMediator mediator) : base(botStorage, mediator)
+    {
     }
   }
 
@@ -69,8 +72,10 @@ namespace BetDotNext.Tests.Bot
       var botStorage = new BotStorageInMemory();
 
       var serviceProvider = new Mock<IServiceProvider>();
+      var botMediator = new Mock<IBotMediator>();
+
       serviceProvider.Setup(p => p.GetService(It.IsAny<Type>()))
-        .Returns(new StartConversation(botStorage));
+        .Returns(new StartConversation(botStorage, botMediator.Object));
 
 
       var bot = new BotPlatform.Impl.Bot(serviceProvider.Object, botStorage, new NullLogger<BotPlatform.Impl.Bot>());
