@@ -122,8 +122,6 @@ namespace BetDotNext.ExternalServices
         var newBidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
         await AddBidder(newBidder);
         _bidders = await BiddersAsync();
-
-        return null;
       }
 
       var speaker = _teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
@@ -151,7 +149,7 @@ namespace BetDotNext.ExternalServices
       }
       else if (rate != null)
       {
-        if (bidder.CurrentScore + rate.RateValue < bet.Rate)
+        if (bidder?.CurrentScore + rate.RateValue < bet.Rate)
         {
           _logger.LogError($"rate: {bidder.CurrentScore} < {bet.Rate}");
           return null;
@@ -161,7 +159,7 @@ namespace BetDotNext.ExternalServices
       }
       else
       {
-        if (bidder.CurrentScore < bet.Rate)
+        if (bidder?.CurrentScore < bet.Rate)
         {
           _logger.LogError($"rate: {bidder.CurrentScore} < {bet.Rate}");
           return null;
@@ -184,7 +182,7 @@ namespace BetDotNext.ExternalServices
       _bidders = await BiddersAsync();
       _rides = await RidesAsync();
 
-      return _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
+      return _bidders.Single(x => x.Id == bidder?.Id).CurrentScore;
     }
 
     public async Task<string> DeleteRateForBet(CreateBet bet)
