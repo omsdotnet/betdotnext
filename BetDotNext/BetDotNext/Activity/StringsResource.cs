@@ -21,9 +21,15 @@
 
     public static readonly string FailCreatedActivityMessage = "Не удалось создать ставку.\r\nПопробуйте выполнить команду снова.";
 
+    public static readonly string FailDeleteActivityMessage = "Не удалось удалить ставку.\r\nПопробуйте выполнить команду снова.";
+
     public static readonly string RemoveBetActivityMessage = "Данная команда предпологает следующий формат снятия ставки:\r\n" + 
                                                              "[участник]-[спикер]-0-[номинация]\r\n" +
                                                              "[участник]-[спикер]-0 (снять все ставки на спикера)\r\n" +
                                                              "[участник]-0 (снять все текущие ставки участника)";
+
+    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0.";
+
+    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена.";
   }
 }

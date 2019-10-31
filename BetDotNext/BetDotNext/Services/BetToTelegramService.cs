@@ -37,15 +37,13 @@ namespace BetDotNext.Services
           if (message.Chat != null)
           {
             await _telegramBotClient.SendTextMessageAsync(message.Chat, message.Text);
+            _queueMessagesService.Dequeue(message.Id);
+            _logger.LogInformation("The message {0} was deleted", message.Id);
           }
         }
         catch (Exception ex)
         {
           _logger.LogError(ex, "Error when send a message.");
-        }
-        finally
-        {
-          _queueMessagesService.Dequeue(message.Id);
         }
       }
     }
