@@ -1,8 +1,7 @@
-
-ls -lr
+ls -lR
 
 echo 'decrypt file key'
-./appveyor-tools/secure-file -decrypt /keys/key.enc -secret $secret -salt $salt
+sh ./appveyor-tools/secure-file -decrypt /keys/key.enc -secret $secret -salt $salt
 if [[ $? -ne 0 ]]; then
 echo 'secure-file fail'
 exit 1
