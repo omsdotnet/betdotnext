@@ -16,6 +16,8 @@ environment:
     secure: zG5vlCDX3S2JRcV7BMq/3az2r7wIJsUrQ2PuM4BJJ90=
   server:
     secure: aA6ejbAaa2JOm2l5kqC7YQ==
+  code:
+    secure: 1mktox9KPQp934S9kbmdyt6V1Jr3BPW6OPg6gz7vWqQ=
 
 install:
   - docker version

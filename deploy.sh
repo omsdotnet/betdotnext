@@ -16,3 +16,5 @@ if [ $? -ne 0 ]; then
 fi
 
 ssh -i keys/key root@$server
+send $code
+interact
