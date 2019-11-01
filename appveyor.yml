@@ -1,6 +1,4 @@
 version: 1.0.{build}
-image: Ubuntu
-
 environment:
   DOCKER_PASS:
     secure: T5atRDJZWwSIN1388pnTqw==
@@ -14,6 +12,8 @@ environment:
     secure: kymuAo3WgI7yf7s3GtiqcL6f2Yhn8h8jDBgduA2K10ATHTkt2UVPsflDYCLe99mDJzHSmeWiR4tBeDWKWsAtOg==
   secret:
     secure: zG5vlCDX3S2JRcV7BMq/3az2r7wIJsUrQ2PuM4BJJ90=
+  server:
+    secure: aA6ejbAaa2JOm2l5kqC7YQ==
 
 install:
   - docker version
@@ -30,4 +30,4 @@ build_script:
 deploy_script:
   - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
   - docker-compose push
-  - ./deploy.sh
+  - deploy.sh

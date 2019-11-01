@@ -4,3 +4,5 @@ echo 'decrypt file key'
 
 echo 'substitute docker-compose.yml'
 envsubst < 'docker-compose.prod.yml' > 'docker-compose.yml'
+
+ssh -i /keys/key.enc root@$server
