@@ -86,7 +86,7 @@ namespace BetDotNext.Services
       }
       catch (Exception ex)
       {
-        _logger.LogCritical("The message cannot be processed. {0}", ex.Message);
+        _logger.LogCritical(ex, "The message cannot be processed.");
       }
     }
   }
