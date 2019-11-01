@@ -8,8 +8,6 @@ services:
     restart: always
     ports:
       - "5000:80"
-    depends_on:
-      - mongo
   mongo:
     image: mongo:4.2.0-bionic
     restart: always

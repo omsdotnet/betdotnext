@@ -2,10 +2,18 @@ version: 1.0.{build}
 image: Ubuntu
 
 environment:
-  DOCKER_USER:
-    secure: 04T1JyfyhfcvC1+4KIJg4A==
   DOCKER_PASS:
     secure: T5atRDJZWwSIN1388pnTqw==
+  DOCKER_USER:
+    secure: 04T1JyfyhfcvC1+4KIJg4A==
+  DB:
+    secure: dpMsp0sxqp56JDsafOYE6Q==
+  TELEGRAM_TOKEN:
+    secure: 3FzxMYCpWnzdUHW8FyOdR1vk8ukAltdjox3+rpeOVJlCoNZaBBbIMgG6sqYQZkBy
+  salt:
+    secure: kymuAo3WgI7yf7s3GtiqcL6f2Yhn8h8jDBgduA2K10ATHTkt2UVPsflDYCLe99mDJzHSmeWiR4tBeDWKWsAtOg==
+  secret:
+    secure: zG5vlCDX3S2JRcV7BMq/3az2r7wIJsUrQ2PuM4BJJ90=
 
 install:
   - docker version
@@ -13,6 +21,7 @@ install:
   - sudo chmod +x /usr/local/bin/docker-compose
   - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   - sudo docker-compose --version
+  - curl -sflL 'https://raw.githubusercontent.com/appveyor/secure-file/master/install.sh' | bash -e -
   - dotnet --info
 
 build_script:
@@ -21,3 +30,4 @@ build_script:
 deploy_script:
   - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
   - docker-compose push
+  - ./deploy.sh

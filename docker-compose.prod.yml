@@ -1,0 +1,32 @@
+version: '3'
+services:
+  web:
+    environment:
+      - Mongo=mongodb://mongo
+      - TelegramToken={TELEGRAM_TOKEN}
+      - DB={DB}
+      - SEQ_HOST=http://seq:5341
+    image: peresadaoleg/olegperesada:${APPVEYOR_BUILD_VERSION}-bot
+    restart: always
+    ports:
+      - "5000:443"
+    depends_on:
+      - mongo
+      - seq
+  mongo:
+    image: mongo:4.2.0-bionic
+    restart: unless-stopped
+    volumes:
+      - ~/data/db:/data/db:rw
+    ports:
+      - "28017:27017"
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    image: datalust/seq:5.1
+    restart: unless-stopped
+    volumes:
+      - ~/seq/data/data:/data
+    ports:
+      - "3001:80"
+      - "4000:5341"
