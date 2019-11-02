@@ -2,7 +2,7 @@
 {
   public static class StringsResource
   {
-    public static string StartActivityMessage = "Привет!!!. Я бот который принимает ставки на рейтинг спикеров DotNext\r\n" +
+    public static string StartActivityMessage = "Привет! Я бот, который принимает ставки на рейтинг спикеров DotNext\r\n" +
                                                 "Спикеры: https://dotnext-moscow.ru/people/ \r\n" +
                                                 "Результаты ставок: http://bookmakerboard.azurewebsites.net/";
 
@@ -27,8 +27,8 @@
                                                               "Попробуйте выполнить команду снова.";
 
     public static readonly string RemoveBetActivityMessage = "Данная команда предпологает следующий формат снятия ставки:\r\n" + 
-                                                             "[спикер]-0-[номинация]\r\n" +
-                                                             "[спикер]-0 (снять все ставки на спикера)\r\n" +
+                                                             "[спикер] - 0 - [номинация]\r\n" +
+                                                             "[спикер] - 0 (снять все ставки на спикера)\r\n" +
                                                              "0 (снять все текущие ставки участника)";
 
     public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0.";
