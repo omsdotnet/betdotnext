@@ -15,5 +15,5 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-./rdeploy/rdeploy --username root --host $server --private-key /keys/key --passphrase $code --source docker-compose.yml --destination "/home/dotnext/docker-compose.yml"
-./rdeploy/rdeploy --username root --host $server --private-key /keys/key --passphrase $code --command "cd /home/dotnext | docker-compose up -d"
+./rdeploy/rdeploy --username root --host $server --private-key keys/key --passphrase $code --source docker-compose.yml --destination "/home/dotnext/docker-compose.yml"
+./rdeploy/rdeploy --username root --host $server --private-key keys/key --passphrase $code --command "cd /home/dotnext | docker-compose up -d"
