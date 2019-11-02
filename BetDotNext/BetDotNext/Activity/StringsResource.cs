@@ -18,21 +18,21 @@
     public static readonly string BetActivityUnexpectedFormatMessage = "Не верный формат ставки";
 
     public static readonly string SuccessBetActivity = "Ставка успешно принята.\r\n" + 
-                                                       "Текущее количество баллов {0}.";
+                                                       "Текущее количество баллов {0}";
 
     public static readonly string FailCreatedActivityMessage = "Не удалось создать ставку.\r\n" + 
-                                                               "Попробуйте выполнить команду снова.";
+                                                               "Попробуйте выполнить команду снова";
 
     public static readonly string FailDeleteActivityMessage = "Не удалось удалить ставку.\r\n" + 
-                                                              "Попробуйте выполнить команду снова.";
+                                                              "Попробуйте выполнить команду снова";
 
     public static readonly string RemoveBetActivityMessage = "Данная команда предпологает следующий формат снятия ставки:\r\n" + 
                                                              "[спикер] - 0 - [номинация]\r\n" +
                                                              "[спикер] - 0 (снять все ставки на спикера)\r\n" +
                                                              "0 (снять все текущие ставки участника)";
 
-    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0.";
+    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0";
 
-    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена.";
+    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена";
   }
 }
