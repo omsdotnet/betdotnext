@@ -119,8 +119,8 @@ namespace BetDotNext.ExternalServices
         _logger.LogDebug("Created new bidder {0}", bet.Bidder);
 
         var bidderId = !_bidders.Any() ? 0 : _bidders.Max(p => p.Id);
-        var newBidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
-        await AddBidder(newBidder);
+        bidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
+        await AddBidder(bidder);
         _bidders = await BiddersAsync();
       }
 
