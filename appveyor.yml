@@ -26,6 +26,7 @@ install:
   - sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   - sudo docker-compose --version
   - dotnet --info
+  - dotnet tool install --tool-path ./rdeploy rdeploy --version 1.0.0
 
 build_script:
   - docker-compose up --build --no-start web
@@ -33,4 +34,4 @@ build_script:
 deploy_script:
   - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
   - docker-compose push
-  # - sh deploy.sh
+  - sh deploy.sh
