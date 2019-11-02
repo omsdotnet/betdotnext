@@ -139,7 +139,7 @@ namespace BetDotNext.ExternalServices
       }
 
       var ride = await GetRide(rideId.Value);
-      var rate = ride.Rates.SingleOrDefault(x => x.Bidder.Id == bidder.Id && x.Team == speaker.Id);
+      var rate = ride.Rates.SingleOrDefault(x => x.Bidder.Id == bidder?.Id && x.Team == speaker.Id);
       if (bet.Rate == 0)
       {
         if (rate != null)

@@ -33,4 +33,4 @@ build_script:
 deploy_script:
   - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
   - docker-compose push
-  - sh deploy.sh
+  # - sh deploy.sh
