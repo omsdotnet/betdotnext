@@ -26,7 +26,7 @@
     public static readonly string FailDeleteActivityMessage = "Не удалось удалить ставку.\r\n" + 
                                                               "Попробуйте выполнить команду снова";
 
-    public static readonly string RemoveBetActivityMessage = "Данная команда предпологает следующий формат снятия ставки:\r\n" + 
+    public static readonly string RemoveBetActivityMessage = "Формат снятия ставки слядующий:\r\n" + 
                                                              "[спикер] - 0 - [номинация]\r\n" +
                                                              "[спикер] - 0 (снять все ставки на спикера)";
 
@@ -40,8 +40,8 @@
 
     public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует.";
 
-    public static readonly string HelpText = "Бот понимает комманды:\r\n" +
-                                             "/start - Начало работы с ботом\r\n" +
+    public static readonly string HelpText = "Бот понимает команды:\r\n" +
+                                             "/start - начало работы с ботом\r\n" +
                                              "/bet - сделать ставку на спикера\r\n" +
                                              "/removebet - снять поставленную ранее ставку\r\n" +
                                              "/removeall - снять все ранее поставленные ставки\r\n" +
