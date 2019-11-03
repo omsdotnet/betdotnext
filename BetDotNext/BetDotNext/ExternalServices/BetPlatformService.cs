@@ -40,9 +40,9 @@ namespace BetDotNext.ExternalServices
       try
       {
         await AuthenticationAsync();
-        _bidders = await BiddersAsync();
-        _teams = await TeamsAsync();
-        _rides = await RidesAsync();
+        _bidders ??= await BiddersAsync();
+        _teams ??= await TeamsAsync();
+        _rides ??= await RidesAsync();
       }
       catch (Exception ex)
       {
@@ -104,14 +104,7 @@ namespace BetDotNext.ExternalServices
 
     public async Task<long?> CreateBetAsync(CreateBet bet)
     {
-      if (_bidders == null || _teams == null || _rides == null)
-      {
-        await InitAsync();
-      }
-      else
-      {
-        await AuthenticationAsync();
-      }
+      await InitAsync();
 
       var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
       if (bidder == null)
@@ -185,51 +178,39 @@ namespace BetDotNext.ExternalServices
       return _bidders.Single(x => x.Id == bidder?.Id).CurrentScore;
     }
 
-    public async Task<string> DeleteRateForBet(CreateBet bet)
+    public async Task<string> DeleteRateForBetAsync(CreateBet bet)
     {
-      if (_bidders == null || _teams == null || _rides == null)
-      {
-        await InitAsync();
-      }
-      else
-      {
-        await AuthenticationAsync();
-      }
+      await InitAsync();
 
       if (bet.Rate != 0)
       {
         _logger.LogError($"ERROR - rate: {bet.Rate} != 0");
-        return "Ставка должна быть равна 0.";
+        return StringsResource.BetRateNotEquelsMessage;
       }
 
       var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");
-        return null;
+        return StringsResource.NotExistingBidderMessage;
       }
 
-      var isDeleteForSpeaker = !string.IsNullOrEmpty(bet.Speaker);
-      Team speaker = null;
-      if (isDeleteForSpeaker)
+      var speaker = _teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
+      if (speaker == null)
       {
-        speaker = _teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
-        if (speaker == null)
-        {
-          _logger.LogError("ERROR - bidder not found");
-          return StringsResource.BetRateNotEquelsMessage;
-        }
+        _logger.LogError("ERROR - bidder not found");
+        return StringsResource.ExistingSpeakerMessage;
       }
 
+      var rideId = _rides.FirstOrDefault(x => x.Number == bet.Ride)?.Id;
       var ridesToUpdate = _rides
-        .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id && (!isDeleteForSpeaker || y.Team == speaker?.Id)))
+        .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id && y.Team == speaker.Id && rideId.HasValue && x.Id == rideId.Value))
         .Select(x => x.Id)
         .ToList();
 
-      foreach (var rideId in ridesToUpdate)
+      foreach (var id in ridesToUpdate)
       {
-        var ride = await GetRide(rideId);
-
+        var ride = await GetRide(id);
         var ratesToDelete = ride.Rates
           .Where(x => x.Bidder.Id == bidder.Id && x.Team == speaker.Id)
           .ToList();
@@ -248,7 +229,49 @@ namespace BetDotNext.ExternalServices
 
       var currentScore = _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
       _logger.LogInformation("Current score a participant {0} = {1} from", bet.Bidder, currentScore);
-      return $"Ваша текущая ставка {currentScore}";
+
+      return string.Format(StringsResource.CurrentScoreMessage, currentScore);
+    }
+
+    public async Task<string> DeleteAllBetAsync(string bidderName)
+    {
+      await InitAsync();
+
+      var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bidderName.ToLower());
+      if (bidder == null)
+      {
+        _logger.LogError("ERROR - bidder not found");
+        return StringsResource.NotExistingBidderMessage;
+      }
+
+      var ridesToUpdate = _rides
+        .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id))
+        .Select(x => x.Id)
+        .ToList();
+
+      foreach (var id in ridesToUpdate)
+      {
+        var ride = await GetRide(id);
+        var ratesToDelete = ride.Rates
+          .Where(x => x.Bidder.Id == bidder.Id)
+          .ToList();
+
+        foreach (var rateToDelete in ratesToDelete)
+        {
+          ride.Rates.Remove(rateToDelete);
+        }
+
+        await UpdateRide(ride);
+      }
+
+
+      _bidders = await BiddersAsync();
+      _rides = await RidesAsync();
+
+      var currentScore = _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
+      _logger.LogInformation("Current score a participant {0} = {1} from", bidderName, currentScore);
+
+      return string.Format(StringsResource.CurrentScoreMessage, currentScore);
     }
   }
 }

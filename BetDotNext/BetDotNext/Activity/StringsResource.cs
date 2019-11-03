@@ -31,8 +31,14 @@
                                                              "[спикер] - 0 (снять все ставки на спикера)\r\n" +
                                                              "0 (снять все текущие ставки участника)";
 
-    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0";
+    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0.";
 
-    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена";
+    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена.";
+
+    public static readonly string NotExistingBidderMessage = "Сначало вы должны сделать ставку.";
+
+    public static readonly string CurrentScoreMessage = "Ваша текущая ставка: {0}";
+
+    public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует.";
   }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BetDotNext.Activity.Utils;
 using BetDotNext.BotPlatform;
 using BetDotNext.BotPlatform.Impl;
 using BetDotNext.ExternalServices;
@@ -35,7 +36,7 @@ namespace BetDotNext.Activity.Bet
       string[] parts = message.Text.Split('-', StringSplitOptions.RemoveEmptyEntries);
       if (parts.Length != SegmentLength)
       {
-        var err = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.BetActivityUnexpectedFormatMessage };
+        var err = new MessageQueue { Chat = message.Chat, Text = StringsResource.BetActivityUnexpectedFormatMessage };
         _queueMessagesService.Enqueue(err);
         _logger.LogWarning("Wrong format message from chat {0}", chatId);
 
@@ -44,22 +45,19 @@ namespace BetDotNext.Activity.Bet
 
       _logger.LogInformation("The correct format message from chat {0}", chatId);
 
-      var lm = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.LoadingMessage };
+      var lm = new MessageQueue { Chat = message.Chat, Text = StringsResource.LoadingMessage };
       _queueMessagesService.Enqueue(lm);
 
-      var bidder = !string.IsNullOrEmpty(message.Chat.Username) ? 
-        message.Chat.Username : 
-        $"{message.Chat.LastName} {message.Chat.FirstName}";
-
-      var speaker = parts[0].Trim();
-      var rate = parts[1].Trim();
-      var ride = NormalizeRideValue(parts[2]);
-
-      var fail = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.FailCreatedActivityMessage };
+      var fail = new MessageQueue { Chat = message.Chat, Text = StringsResource.FailCreatedActivityMessage };
 
       try
       {
-        var bet = new CreateBet {  Rate = uint.Parse(rate), Ride = ride, Speaker = speaker, Bidder = bidder };
+        var bidder = message.GetUserNameOrLastFirstName();
+        var speaker = parts[0].Trim();
+        var rate = parts[1].Trim();
+        var ride = parts[2].NormalizeRideValue();
+
+        var bet = new CreateBet {Rate = uint.Parse(rate), Ride = ride, Speaker = speaker, Bidder = bidder};
         var currentScore = await _betPlatformService.CreateBetAsync(bet);
         if (!currentScore.HasValue)
         {
@@ -69,31 +67,26 @@ namespace BetDotNext.Activity.Bet
         }
 
         var tSuccess = string.Format(StringsResource.SuccessBetActivity, currentScore);
-        var success = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = tSuccess };
+        var success = new MessageQueue {Chat = message.Chat, Text = tSuccess};
         _queueMessagesService.Enqueue(success);
         _logger.LogInformation("Bet successfully created from chat {0}", chatId);
 
         return true;
       }
+      catch (Exception ex) when (ex is UnexpectedFormatMessageException)
+      {
+        _logger.LogError(ex, "Error when create bets");
+
+        var formatMessage = new MessageQueue { Chat = message.Chat, Text = ex.Message };
+        _queueMessagesService.Enqueue(formatMessage);
+      }
       catch (Exception ex)
       {
         _logger.LogError(ex, "Error when create bets");
         _queueMessagesService.Enqueue(fail);
-        
-        return false;
       }
-    }
 
-    private static uint NormalizeRideValue(string rideValue)
-    {
-      var rideNumber = rideValue
-        .Trim()
-        .ToLower()
-        .Replace("top3", "11")
-        .Replace("top5", "12")
-        .Replace("top10", "13");
-
-      return uint.Parse(rideNumber);
+      return false;
     }
   }
 }

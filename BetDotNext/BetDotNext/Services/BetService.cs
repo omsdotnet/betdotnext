@@ -81,7 +81,11 @@ namespace BetDotNext.Services
           message.Chat.Username :
           $"{message.Chat.LastName} {message.Chat.FirstName}";
 
-        _logger.LogInformation("Received message from chat {0} user {1}", message.Chat.Id, user);
+        _logger.LogInformation("Received message {0} from chat {1} user {2}. ", 
+          message.Text, 
+          message.Chat.Id, 
+          user);
+
         await _bot.StartDialogAsync(message);
       }
       catch (Exception ex)

@@ -34,12 +34,11 @@ namespace BetDotNext.Services
       {
         try
         {
-          if (message.Chat != null)
-          {
-            await _telegramBotClient.SendTextMessageAsync(message.Chat, message.Text);
-            _queueMessagesService.Dequeue(message.Id);
-            _logger.LogInformation("The message {0} was deleted", message.Id);
-          }
+          if (message.Chat == null) continue;
+
+          await _telegramBotClient.SendTextMessageAsync(message.Chat, message.Text);
+          _queueMessagesService.Dequeue(message.Id);
+          _logger.LogInformation("The message {0} from user {1} was deleted", message.Id, message.Chat.Id);
         }
         catch (Exception ex)
         {
