@@ -18,6 +18,10 @@ environment:
     secure: aA6ejbAaa2JOm2l5kqC7YQ==
   code:
     secure: 1mktox9KPQp934S9kbmdyt6V1Jr3BPW6OPg6gz7vWqQ=
+  bet_login:
+    secure: 10g3BHwFOS7SQv8ZNqmsKg==
+  bet_pass:
+    secure: 5F3DDVulAcrqPRyRVNJy5A==
 
 install:
   - docker version

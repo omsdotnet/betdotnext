@@ -37,7 +37,8 @@
 
     public static readonly string NotExistingBidderMessage = "Сначало вы должны сделать ставку.";
 
-    public static readonly string CurrentScoreMessage = "Ваша текущая ставка: {0}";
+    public static readonly string CurrentScoreMessage = "Все ваши ставки успешно удалены.\r\n" +
+                                                        "Ваша текущая ставка: <bold>{0}</bold>";
 
     public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует.";
 
@@ -48,5 +49,9 @@
                                              "/removeall - снять все ранее поставленные ставки\r\n" +
                                              "/score - отобразить свой текущий счет\r\n" +
                                              "/help - выдать эту справку";
+
+    public static readonly string IncorectNomination = "Неверный формат номинации.";
+
+    public static readonly string NominationNotEmpty = "Номинация не может быть пустой.";
   }
 }

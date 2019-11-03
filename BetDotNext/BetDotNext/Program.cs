@@ -58,15 +58,16 @@ namespace BetDotNext
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.Seq(seqHost)
+            .WriteTo.Seq(seqHost, bufferBaseFilename: "", batchPostingLimit: 100)
             .CreateLogger();
+
         }).ConfigureWebHostDefaults(webBuilder =>
         {
           webBuilder.ConfigureServices(services =>
           {
-            var connection = _configuration["Mongo"] ?? "mongodb://192.168.168.131:28017";
-            var database = _configuration["DB"] ?? "zx";
-            var telegramToken = _configuration["TelegramToken"] ?? "606619300:AAErpzzU1A1LtArae57jrvYJbtXWAKR087M";
+            var connection = _configuration["Mongo"];
+            var database = _configuration["DB"];
+            var telegramToken = _configuration["TelegramToken"];
 
             var handler = new HttpClientHandler
             {
@@ -84,7 +85,7 @@ namespace BetDotNext
 
             services.AddHttpClient<BetPlatformService>(client =>
             {
-              client.BaseAddress = new Uri("http://bookmakerboard.azurewebsites.net/");
+              client.BaseAddress = new Uri(_configuration["BetPlatform"]);
             });
 
             services.AddSingleton<IBotStorage, BotStorageInMemory>();

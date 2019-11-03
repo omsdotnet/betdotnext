@@ -1,5 +1,4 @@
-﻿using System;
-using Telegram.Bot.Types;
+﻿using Telegram.Bot.Types;
 
 namespace BetDotNext.Activity.Utils
 {
@@ -16,7 +15,7 @@ namespace BetDotNext.Activity.Utils
     {
       if (string.IsNullOrEmpty(rideValue))
       {
-        throw new UnexpectedFormatMessageException("Номинация не может быть пустой.");
+        throw new UnexpectedFormatMessageException(StringsResource.NominationNotEmpty);
       }
 
       var rideNumber = rideValue
@@ -28,7 +27,7 @@ namespace BetDotNext.Activity.Utils
 
       return uint.TryParse(rideNumber, out var ride) ? 
         ride : 
-        throw new UnexpectedFormatMessageException("Не верный формат номинации.");
+        throw new UnexpectedFormatMessageException(StringsResource.IncorectNomination);
     }
   }
 }

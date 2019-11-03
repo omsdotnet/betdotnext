@@ -6,10 +6,15 @@ services:
       - TelegramToken=${TELEGRAM_TOKEN}
       - DB=${DB}
       - SEQ_HOST=http://seq:5341
+      - BetPlatform=http://bookmakerboard.azurewebsites.net/
+      - bet_login=${bet_login}
+      - bet_pass=${bet_pass}
     image: peresadaoleg/olegperesada:${APPVEYOR_BUILD_VERSION}-bot
     restart: unless-stopped
     ports:
       - "5000:443"
+    volumes:
+      - ~/bot/data:/data
     depends_on:
       - mongo
       - seq
@@ -26,7 +31,7 @@ services:
     image: datalust/seq:5.1
     restart: unless-stopped
     volumes:
-      - ~/seq/data/data:/data
+      - ~/seq/data/data:/app/logs
     ports:
       - "3001:80"
       - "4000:5341"

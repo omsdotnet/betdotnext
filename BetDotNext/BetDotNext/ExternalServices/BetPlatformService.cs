@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using BetDotNext.Activity;
 using BetDotNext.ExternalServices.Dto;
-using BetDotNext.Utils;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -27,12 +27,16 @@ namespace BetDotNext.ExternalServices
     private IList<Team> _teams;
     private IList<Ride> _rides;
 
-    public BetPlatformService(HttpClient httpClient, ILogger<BetPlatformService> logger)
-    {
-      Ensure.NotNull(httpClient, nameof(httpClient));
+    private readonly string _betPass;
+    private readonly string _betLogin;
 
+    public BetPlatformService(HttpClient httpClient, ILogger<BetPlatformService> logger, IConfiguration configuration)
+    {
       _httpClient = httpClient;
       _logger = logger;
+
+      _betLogin = configuration["bet_login"];
+      _betPass = configuration["bet_pass"];
     }
 
     public async Task InitAsync()
@@ -40,9 +44,9 @@ namespace BetDotNext.ExternalServices
       try
       {
         await AuthenticationAsync();
-        _bidders ??= await BiddersAsync();
-        _teams ??= await TeamsAsync();
-        _rides ??= await RidesAsync();
+        _bidders = await BiddersAsync();
+        _teams = await TeamsAsync();
+        _rides = await RidesAsync();
       }
       catch (Exception ex)
       {
@@ -52,7 +56,7 @@ namespace BetDotNext.ExternalServices
 
     private async Task AuthenticationAsync()
     {
-      var url = $"api/Authentication/Login?login={HttpUtility.UrlEncode("Азино")}&password={HttpUtility.UrlEncode("3топора3")}";
+      var url = $"api/Authentication/Login?login={HttpUtility.UrlEncode(_betLogin)}&password={HttpUtility.UrlEncode(_betPass)}";
       var result = await _httpClient.PostAsync(url, null);
       var _ = await result.Content.ReadAsStringAsync();
       result.EnsureSuccessStatusCode();
@@ -114,6 +118,7 @@ namespace BetDotNext.ExternalServices
         var bidderId = !_bidders.Any() ? 0 : _bidders.Max(p => p.Id);
         bidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
         await AddBidder(bidder);
+
         _bidders = await BiddersAsync();
       }
 
