@@ -1,4 +1,4 @@
-ls -lR
+# ls -lR
 
 echo 'decrypt file key'
 curl -sflL 'https://raw.githubusercontent.com/appveyor/secure-file/master/install.sh' | bash -e -

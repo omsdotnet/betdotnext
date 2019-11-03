@@ -96,13 +96,19 @@ namespace BetDotNext
             services.AddSingleton<RemoveBetActivity>();
             services.AddSingleton<CreatedBetActivity>();
             services.AddSingleton<ConfirmRemoveBetActivity>();
+            services.AddSingleton<HelpActivity>();
+            services.AddSingleton<RemoveAllActivity>();
+            services.AddSingleton<ScoreActivity>();
 
           }).Configure(app =>
           {
             app.ApplicationServices.GetRequiredService<IBot>()
               .AddActivity("/start", typeof(StartActivity))
               .AddActivity("/bet", typeof(BetActivity))
-              .AddActivity("/removebet", typeof(RemoveBetActivity));
+              .AddActivity("/removebet", typeof(RemoveBetActivity))
+              .AddActivity("/help", typeof(HelpActivity))
+              .AddActivity("/score", typeof(ScoreActivity))
+              .AddActivity("/removeall", typeof(RemoveAllActivity));
 
             app.ApplicationServices.GetRequiredService<BetService>().Start();
           }).UseSerilog();
