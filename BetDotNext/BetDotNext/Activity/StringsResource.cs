@@ -40,5 +40,13 @@
     public static readonly string CurrentScoreMessage = "Ваша текущая ставка: {0}";
 
     public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует.";
+
+    public static readonly string HelpText = "Бот понимает комманды:\r\n" +
+                                             "/start - Начало работы с ботом\r\n" +
+                                             "/bet - сделать ставку на спикера\r\n" +
+                                             "/removebet - снять поставленную ранее ставку\r\n" +
+                                             "/removeall - снять все ранее поставленные ставки\r\n" +
+                                             "/score - отобразить свой текущий счет\r\n" +
+                                             "/help - выдать эту справку";
   }
 }
