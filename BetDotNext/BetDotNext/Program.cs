@@ -58,7 +58,7 @@ namespace BetDotNext
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
             .WriteTo.Console()
-            .WriteTo.Seq(seqHost, bufferBaseFilename: "", batchPostingLimit: 100)
+            .WriteTo.Seq(seqHost, bufferBaseFilename: "./logs/bot.log", batchPostingLimit: 100)
             .CreateLogger();
 
         }).ConfigureWebHostDefaults(webBuilder =>
