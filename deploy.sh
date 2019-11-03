@@ -19,4 +19,4 @@ if [ $? -ne 0 ]; then
 fi
 
 ./rdeploy/rdeploy --username root --host $server --private-key keys/key --passphrase $code --source docker-compose.yml --destination "/home/dotnext/docker-compose.yml"
-./rdeploy/rdeploy --username root --host $server --private-key keys/key --passphrase $code --command "docker-compose -f /home/dotnext/docker-compose.yml up -d"
+./rdeploy/rdeploy --username root --host $server --private-key keys/key --passphrase $code --command "docker-compose -f /home/dotnext/docker-compose.yml up -d && docker image prune"
