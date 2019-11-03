@@ -14,7 +14,7 @@ services:
     ports:
       - "5000:443"
     volumes:
-      - ~/bot/data:/data
+      - ~/bot/data:/app/logs
     depends_on:
       - mongo
       - seq
@@ -31,7 +31,7 @@ services:
     image: datalust/seq:5.1
     restart: unless-stopped
     volumes:
-      - ~/seq/data/data:/app/logs
+      - ~/seq/data/data:/data
     ports:
       - "3001:80"
       - "4000:5341"
