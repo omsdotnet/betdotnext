@@ -37,7 +37,7 @@
     public static readonly string NotExistingBidderMessage = "Сначало вы должны сделать ставку.";
 
     public static readonly string CurrentScoreMessage = "Все ваши ставки успешно удалены.\r\n" +
-                                                        "Ваша текущая ставка: <bold>{0}</bold>";
+                                                        "Ваша текущая ставка: {0}";
 
     public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует.";
 
