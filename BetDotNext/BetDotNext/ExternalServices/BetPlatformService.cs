@@ -236,7 +236,7 @@ namespace BetDotNext.ExternalServices
       var currentScore = _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
       _logger.LogInformation("Current score a participant {0} = {1} from", bet.Bidder, currentScore);
 
-      return string.Format(StringsResource.CurrentScoreMessage, currentScore);
+      return string.Format(StringsResource.CurrentScoreRemoveMessage, currentScore);
     }
 
     public async Task<string> DeleteAllBetAsync(string bidderName)
@@ -277,7 +277,7 @@ namespace BetDotNext.ExternalServices
       var currentScore = _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
       _logger.LogInformation("Current score a participant {0} = {1} from", bidderName, currentScore);
 
-      return string.Format(StringsResource.CurrentScoreMessage, currentScore);
+      return string.Format(StringsResource.CurrentScoreRemoveMessage, currentScore);
     }
 
     public async Task<string> CurrentScoreAsync(string currentBidder)
