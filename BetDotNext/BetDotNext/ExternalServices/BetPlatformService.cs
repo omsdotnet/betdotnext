@@ -279,5 +279,19 @@ namespace BetDotNext.ExternalServices
 
       return string.Format(StringsResource.CurrentScoreMessage, currentScore);
     }
+
+    public async Task<string> CurrentScoreAsync(string currentBidder)
+    {
+      await InitAsync();
+
+      var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == currentBidder.ToLower());
+      if (bidder == null)
+      {
+        _logger.LogError("ERROR - bidder not found");
+        return StringsResource.NotExistingBidderMessage;
+      }
+
+      return string.Format(StringsResource.CurrentScoreMessage, bidder.CurrentScore);
+    }
   }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BetDotNext.BotPlatform;
 using BetDotNext.BotPlatform.Impl;
 using BetDotNext.Models;
@@ -22,7 +21,7 @@ namespace BetDotNext.Activity
 
     public override Task<bool> CurrentExecuteAsync<T>(Message message, T context)
     {
-      var newMessage = new MessageQueue { Chat = message.Chat, StartTime = DateTime.UtcNow, Text = StringsResource.StartActivityMessage };
+      var newMessage = new MessageQueue { Chat = message.Chat, Text = StringsResource.StartActivityMessage };
       _queueMessagesService.Enqueue(newMessage);
 
       return Task.FromResult(false);

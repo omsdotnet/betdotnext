@@ -52,5 +52,7 @@
     public static readonly string IncorectNomination = "Неверный формат номинации.";
 
     public static readonly string NominationNotEmpty = "Номинация не может быть пустой.";
+
+    public static readonly string GettingCurrentScoreException = "Не удалось получить текущее состояние счёта.";
   }
 }
