@@ -7,7 +7,7 @@ services:
       - DB=${DB}
       - SEQ_HOST=http://seq:5341
     image: peresadaoleg/olegperesada:${APPVEYOR_BUILD_VERSION}-bot
-    restart: always
+    restart: unless-stopped
     ports:
       - "5000:443"
     depends_on:
