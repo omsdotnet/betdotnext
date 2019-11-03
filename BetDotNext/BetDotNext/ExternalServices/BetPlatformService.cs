@@ -142,7 +142,7 @@ namespace BetDotNext.ExternalServices
       }
       else if (rate != null)
       {
-        if (bidder?.CurrentScore + rate.RateValue < bet.Rate)
+        if (bidder.CurrentScore + rate.RateValue < bet.Rate)
         {
           _logger.LogError($"rate: {bidder.CurrentScore} < {bet.Rate}");
           return null;
@@ -152,7 +152,7 @@ namespace BetDotNext.ExternalServices
       }
       else
       {
-        if (bidder?.CurrentScore < bet.Rate)
+        if (bidder.CurrentScore < bet.Rate)
         {
           _logger.LogError($"rate: {bidder.CurrentScore} < {bet.Rate}");
           return null;

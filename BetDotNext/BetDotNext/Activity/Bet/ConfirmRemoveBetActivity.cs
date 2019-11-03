@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BetDotNext.Activity.Utils;
 using BetDotNext.BotPlatform;
@@ -40,7 +41,7 @@ namespace BetDotNext.Activity.Bet
 
       var parts = messageText.Split('-', StringSplitOptions.RemoveEmptyEntries);
       var len = parts.Length;
-      if (len != 2 || len != 3)
+      if (!new[] { 2, 3 }.Contains(len))
       {
         var err = new MessageQueue { Chat = message.Chat, Text = StringsResource.BetActivityUnexpectedFormatMessage };
         _queueMessagesService.Enqueue(err);
