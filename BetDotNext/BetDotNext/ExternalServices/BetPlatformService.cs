@@ -204,7 +204,8 @@ namespace BetDotNext.ExternalServices
 
       var rideId = _rides.FirstOrDefault(x => x.Number == bet.Ride)?.Id;
       var ridesToUpdate = _rides
-        .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id && y.Team == speaker.Id && rideId.HasValue && x.Id == rideId.Value))
+        .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id && y.Team == speaker.Id &&
+                                     (rideId.HasValue && x.Id == rideId.Value || !rideId.HasValue)))
         .Select(x => x.Id)
         .ToList();
 
