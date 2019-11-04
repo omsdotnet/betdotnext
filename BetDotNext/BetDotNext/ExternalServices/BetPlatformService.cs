@@ -140,17 +140,14 @@ namespace BetDotNext.ExternalServices
       var rate = ride.Rates.SingleOrDefault(x => x.Bidder.Id == bidder?.Id && x.Team == speaker.Id);
       if (bet.Rate == 0)
       {
-        if (rate != null)
-        {
-          ride.Rates.Remove(rate);
-        }
+        throw new UnexpectedFormatMessageException(StringsResource.BetRateIsNotZerro);
       }
       else if (rate != null)
       {
         if (bidder.CurrentScore + rate.RateValue < bet.Rate)
         {
           _logger.LogError($"rate: {bidder.CurrentScore} < {bet.Rate}");
-          return null;
+          throw new UnexpectedFormatMessageException(StringsResource.BetRateIsNotEnough);
         }
 
         rate.RateValue = bet.Rate;
@@ -160,7 +157,7 @@ namespace BetDotNext.ExternalServices
         if (bidder.CurrentScore < bet.Rate)
         {
           _logger.LogError($"rate: {bidder.CurrentScore} < {bet.Rate}");
-          return null;
+          throw new UnexpectedFormatMessageException(StringsResource.BetRateIsNotEnough);
         }
 
         var maxId = ride.Rates.Any() ? ride.Rates.Max(x => x.Id) : 0;
