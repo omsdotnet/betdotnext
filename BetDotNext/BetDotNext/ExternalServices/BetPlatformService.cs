@@ -23,10 +23,6 @@ namespace BetDotNext.ExternalServices
     private readonly HttpClient _httpClient;
     private readonly ILogger<BetPlatformService> _logger;
 
-    private IList<Bidder> _bidders;
-    private IList<Team> _teams;
-    private IList<Ride> _rides;
-
     private readonly string _betPass;
     private readonly string _betLogin;
 
@@ -37,21 +33,6 @@ namespace BetDotNext.ExternalServices
 
       _betLogin = configuration["bet_login"];
       _betPass = configuration["bet_pass"];
-    }
-
-    public async Task InitAsync()
-    {
-      try
-      {
-        await AuthenticationAsync();
-        _bidders = await BiddersAsync();
-        _teams = await TeamsAsync();
-        _rides = await RidesAsync();
-      }
-      catch (Exception ex)
-      {
-        _logger.LogCritical("An exception was thrown during initialization dictionary: {0}", ex.Message);
-      }
     }
 
     private async Task AuthenticationAsync()
@@ -108,28 +89,31 @@ namespace BetDotNext.ExternalServices
 
     public async Task<long?> CreateBetAsync(CreateBet bet)
     {
-      await InitAsync();
+      await AuthenticationAsync();
 
-      var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
+      var bidders = await BiddersAsync();
+      var bidder = bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
       if (bidder == null)
       {
         _logger.LogDebug("Created new bidder {0}", bet.Bidder);
 
-        var bidderId = !_bidders.Any() ? 0 : _bidders.Max(p => p.Id);
+        var bidderId = !bidders.Any() ? 0 : bidders.Max(p => p.Id);
         bidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
         await AddBidder(bidder);
 
-        _bidders = await BiddersAsync();
+        bidders = await BiddersAsync();
       }
 
-      var speaker = _teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
+      var teams = await TeamsAsync();
+      var speaker = teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
       if (speaker == null)
       {
         _logger.LogError("Not found speaker");
-        throw new UnexpectedFormatMessageException(StringsResource.ExistingSpeakerMessage);
+        throw new UnexpectedFormatMessageException(StringsResource.SpeakerNotFound);
       }
 
-      var rideId = _rides.SingleOrDefault(x => x.Number == bet.Ride)?.Id;
+      var rides = await RidesAsync();
+      var rideId = rides.SingleOrDefault(x => x.Number == bet.Ride)?.Id;
       if (!rideId.HasValue)
       {
         _logger.LogError("Not found ride");
@@ -174,38 +158,40 @@ namespace BetDotNext.ExternalServices
 
       await UpdateRide(ride);
 
-      _bidders = await BiddersAsync();
-      _rides = await RidesAsync();
+      bidders = await BiddersAsync();
 
-      return _bidders.Single(x => x.Id == bidder?.Id).CurrentScore;
+      return bidders.Single(x => x.Id == bidder?.Id).CurrentScore;
     }
 
     public async Task<string> DeleteRateForBetAsync(CreateBet bet)
     {
-      await InitAsync();
-
       if (bet.Rate != 0)
       {
         _logger.LogError($"ERROR - rate: {bet.Rate} != 0");
         return StringsResource.BetRateNotEquelsMessage;
       }
 
-      var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
+      await AuthenticationAsync();
+
+      var bidders = await BiddersAsync();
+      var bidder = bidders.SingleOrDefault(x => x.Name.ToLower() == bet.Bidder.ToLower());
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");
         return StringsResource.NotExistingBidderMessage;
       }
 
-      var speaker = _teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
+      var teams = await TeamsAsync();
+      var speaker = teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
       if (speaker == null)
       {
-        _logger.LogError("ERROR - bidder not found");
-        return StringsResource.ExistingSpeakerMessage;
+        _logger.LogError("ERROR - speaker not found");
+        return StringsResource.SpeakerNotFound;
       }
 
-      var rideId = _rides.FirstOrDefault(x => x.Number == bet.Ride)?.Id;
-      var ridesToUpdate = _rides
+      var rides = await RidesAsync();
+      var rideId = rides.FirstOrDefault(x => x.Number == bet.Ride)?.Id;
+      var ridesToUpdate = rides
         .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id && y.Team == speaker.Id &&
                                      (rideId.HasValue && x.Id == rideId.Value || !rideId.HasValue)))
         .Select(x => x.Id)
@@ -226,11 +212,9 @@ namespace BetDotNext.ExternalServices
         await UpdateRide(ride);
       }
 
+      bidders = await BiddersAsync();
+      var currentScore = bidders.Single(x => x.Id == bidder.Id).CurrentScore;
 
-      _bidders = await BiddersAsync();
-      _rides = await RidesAsync();
-
-      var currentScore = _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
       _logger.LogInformation("Current score a participant {0} = {1} from", bet.Bidder, currentScore);
 
       return string.Format(StringsResource.CurrentScoreRemoveMessage, currentScore);
@@ -238,16 +222,18 @@ namespace BetDotNext.ExternalServices
 
     public async Task<string> DeleteAllBetAsync(string bidderName)
     {
-      await InitAsync();
+      await AuthenticationAsync();
 
-      var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == bidderName.ToLower());
+      var bidders = await BiddersAsync();
+      var bidder = bidders.SingleOrDefault(x => x.Name.ToLower() == bidderName.ToLower());
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");
         return StringsResource.NotExistingBidderMessage;
       }
 
-      var ridesToUpdate = _rides
+      var rides = await RidesAsync();
+      var ridesToUpdate = rides
         .Where(x => x.Rates.Any(y => y.Bidder.Id == bidder.Id))
         .Select(x => x.Id)
         .ToList();
@@ -267,11 +253,9 @@ namespace BetDotNext.ExternalServices
         await UpdateRide(ride);
       }
 
+      bidders = await BiddersAsync();
+      var currentScore = bidders.Single(x => x.Id == bidder.Id).CurrentScore;
 
-      _bidders = await BiddersAsync();
-      _rides = await RidesAsync();
-
-      var currentScore = _bidders.Single(x => x.Id == bidder.Id).CurrentScore;
       _logger.LogInformation("Current score a participant {0} = {1} from", bidderName, currentScore);
 
       return string.Format(StringsResource.CurrentScoreRemoveMessage, currentScore);
@@ -279,9 +263,10 @@ namespace BetDotNext.ExternalServices
 
     public async Task<string> CurrentScoreAsync(string currentBidder)
     {
-      await InitAsync();
+      await AuthenticationAsync();
 
-      var bidder = _bidders.SingleOrDefault(x => x.Name.ToLower() == currentBidder.ToLower());
+      var bidders = await BiddersAsync();
+      var bidder = bidders.SingleOrDefault(x => x.Name.ToLower() == currentBidder.ToLower());
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");

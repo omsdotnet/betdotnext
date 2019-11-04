@@ -2,7 +2,7 @@
 {
   public static class StringsResource
   {
-    public static string StartActivityMessage = "Здравия желаю!!!\r\n" + 
+    public static string StartActivityMessage = "Здравия желаю!\r\n" + 
                                                 "Я бот, который принимает ставки на рейтинг спикеров DotNext.\r\n" +
                                                 "Спикеры: https://dotnext-moscow.ru/people/ \r\n" +
                                                 "Результаты ставок: http://bookmakerboard.azurewebsites.net/ \r\n" +
@@ -27,7 +27,7 @@
                                                                "Роман Просин - 100 - top3\r\n" +
                                                                "tukasz Pyrzyk - 10 - top10\r\n" +
                                                                "\r\n" +
-                                                               "повторная ставка на спикера в той-же номинации, считается корретировкой предыдущей ставки";
+                                                               "значения ставок - целочисленные, повторная ставка на спикера в той-же номинации считается корретировкой предыдущей ставки";
 
     public static readonly string LoadingMessage = "Обрабатываю Вашу команду...";
 
@@ -50,7 +50,7 @@
 
     public static readonly string BetRateIsNotZerro = "Ошибка - ставка не должна быть равна 0";
 
-    public static readonly string BetRateIsNotEnough = "Ошибка - для данной ставки, у Вас недостаточно баллов";
+    public static readonly string BetRateIsNotEnough = "Ошибка - для данной ставки у Вас недостаточно баллов";
 
     public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена";
 
@@ -59,7 +59,7 @@
     public static readonly string CurrentScoreRemoveMessage = "Все ваши ставки успешно удалены.\r\n" +
                                                               "Осталось баллов: {0}";
 
-    public static readonly string ExistingSpeakerMessage = "Ошибка - указанный спикер отсутствует в перечене спикеров: https://dotnext-moscow.ru/people/";
+    public static readonly string SpeakerNotFound = "Ошибка - указанный спикер отсутствует в перечене спикеров: https://dotnext-moscow.ru/people/";
 
     public static readonly string HelpText = "Бот понимает команды:\r\n" +
                                              "/start - начало работы с ботом\r\n" +

@@ -21,6 +21,9 @@ namespace BetDotNext.Activity.Utils
       var rideNumber = rideValue
         .Trim()
         .ToLower()
+        .Replace("11", "-")
+        .Replace("12", "-")
+        .Replace("13", "-")
         .Replace("top3", "11")
         .Replace("top5", "12")
         .Replace("top10", "13");
