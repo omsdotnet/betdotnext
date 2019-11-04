@@ -11,9 +11,9 @@
                                                 "У Вас есть 1000 баллов, которые Вы можете ставить на то, что спикер попадет в номинации рейтинга: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, top3, top5, top10\r\n" +
                                                 "\r\n" +
                                                 "После публикации организаторами рейтинга спикеров на хабре, если Ваша ставка сработала, то:\r\n" +
-                                                "количество баллов в категории top10 - удваивается\r\n" +
-                                                "количество баллов в категории top5 - утраивается\r\n" +
-                                                "количество баллов в категории top3 - учетверяется\r\n" +
+                                                "количество баллов в номинации top10 - удваивается\r\n" +
+                                                "количество баллов в номинации top5 - утраивается\r\n" +
+                                                "количество баллов в номинации top3 - учетверяется\r\n" +
                                                 "количество баллов поставленных на определенные места (1-10) - упятеряется\r\n" +
                                                 "\r\n" +
                                                 "победитель, набравший в итоге больше всего баллов, получает приз - https://www.amazon.com/Pro-NET-Benchmarking-Performance-Measurement/dp/1484249402 \r\n" +
@@ -46,16 +46,16 @@
                                                              "[спикер] - 0 - [номинация]\r\n" +
                                                              "[спикер] - 0   (снять все ставки на спикера)";
 
-    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0.";
+    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0";
 
-    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена.";
+    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена";
 
-    public static readonly string NotExistingBidderMessage = "Сначало вы должны сделать ставку.";
+    public static readonly string NotExistingBidderMessage = "Сначало вы должны сделать ставку";
 
     public static readonly string CurrentScoreRemoveMessage = "Все ваши ставки успешно удалены.\r\n" +
                                                               "Осталось баллов: {0}";
 
-    public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует.";
+    public static readonly string ExistingSpeakerMessage = "Указанный спикер не существует";
 
     public static readonly string HelpText = "Бот понимает команды:\r\n" +
                                              "/start - начало работы с ботом\r\n" +
@@ -65,12 +65,12 @@
                                              "/score - отобразить свой текущий счет\r\n" +
                                              "/help - выдать эту справку";
 
-    public static readonly string IncorectNomination = "Неверный формат номинации.";
+    public static readonly string IncorectNomination = "Неверный формат номинации";
 
-    public static readonly string NominationNotEmpty = "Номинация не может быть пустой.";
+    public static readonly string NominationNotEmpty = "Номинация не может быть пустой";
 
-    public static readonly string GettingCurrentScoreException = "Не удалось получить текущее состояние счёта.";
+    public static readonly string GettingCurrentScoreException = "Не удалось получить текущее состояние счёта";
 
-    public static readonly string CurrentScoreMessage = "Осталось баллов: {0}.";
+    public static readonly string CurrentScoreMessage = "Осталось баллов: {0}";
   }
 }

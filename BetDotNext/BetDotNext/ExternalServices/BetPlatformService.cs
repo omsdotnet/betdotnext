@@ -126,14 +126,14 @@ namespace BetDotNext.ExternalServices
       if (speaker == null)
       {
         _logger.LogError("Not found speaker");
-        return null;
+        throw new Exception(StringsResource.ExistingSpeakerMessage);
       }
 
       var rideId = _rides.SingleOrDefault(x => x.Number == bet.Ride)?.Id;
       if (!rideId.HasValue)
       {
         _logger.LogError("Not found ride");
-        return null;
+        throw new Exception(StringsResource.IncorectNomination);
       }
 
       var ride = await GetRide(rideId.Value);
