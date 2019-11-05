@@ -107,12 +107,7 @@ namespace BetDotNext.ExternalServices
 
       var teams = await TeamsAsync();
 
-      var ci = new CultureInfo("ru-RU", false);
-
-      _logger.LogInformation(string.Join(", ", teams.Select(x => x.Name.ToLower(ci).Replace('-', ' ')).ToArray()));
-      _logger.LogInformation(bet.Speaker.ToLower(ci));
-
-      var speaker = teams.SingleOrDefault(x => x.Name.ToLower(ci).Replace('-', ' ') == bet.Speaker.ToLower(ci));
+      var speaker = teams.SingleOrDefault(x => x.Name.Replace('-', ' ').Equals(bet.Speaker, StringComparison.OrdinalIgnoreCase));
       if (speaker == null)
       {
         _logger.LogError("Not found speaker");
@@ -189,7 +184,7 @@ namespace BetDotNext.ExternalServices
       }
 
       var teams = await TeamsAsync();
-      var speaker = teams.SingleOrDefault(x => x.Name.ToLowerInvariant().Replace('-', ' ') == bet.Speaker.ToLowerInvariant());
+      var speaker = teams.SingleOrDefault(x => x.Name.Replace('-', ' ').Equals(bet.Speaker, StringComparison.OrdinalIgnoreCase));
       if (speaker == null)
       {
         _logger.LogError("ERROR - speaker not found");
