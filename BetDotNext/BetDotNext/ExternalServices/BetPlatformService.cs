@@ -184,7 +184,7 @@ namespace BetDotNext.ExternalServices
       }
 
       var teams = await TeamsAsync();
-      var speaker = teams.SingleOrDefault(x => x.Name.Replace('-', ' ').Equals((bet.Speaker, StringComparison.InvariantCultureIgnoreCase));
+      var speaker = teams.SingleOrDefault(x => x.Name.Replace('-', ' ').Equals(bet.Speaker, StringComparison.InvariantCultureIgnoreCase));
       if (speaker == null)
       {
         _logger.LogError("ERROR - speaker not found");
