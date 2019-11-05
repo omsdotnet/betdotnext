@@ -31,7 +31,7 @@
 
     public static readonly string LoadingMessage = "Обрабатываю Вашу команду...";
 
-    public static readonly string BetActivityUnexpectedFormatMessage = "Неверный формат ставки";
+    public static readonly string BetActivityUnexpectedFormatMessage = "Ошибка - неверный формат команды";
 
     public static readonly string SuccessBetActivity = "Команда успешно обработана.\r\n" + 
                                                        "Осталось баллов: {0}";
@@ -46,15 +46,18 @@
                                                              "[спикер] - 0 - [номинация]\r\n" +
                                                              "[спикер] - 0   (снять все ставки на спикера)";
 
-    public static readonly string BetRateNotEquelsMessage = "Ставка должна быть равна 0";
+    public static readonly string BetRateMustZero = "Ошибка - cтавка должна быть равна 0";
 
     public static readonly string BetRateIsNotZerro = "Ошибка - ставка не должна быть равна 0";
 
     public static readonly string BetRateIsNotEnough = "Ошибка - для данной ставки у Вас недостаточно баллов";
 
-    public static readonly string SuccessfullyRemoveMessage = "Ваша ставка успешно удалена";
+    public static readonly string SuccessfullyBetRemove = "Ваша ставка успешно удалена";
 
-    public static readonly string NotExistingBidderMessage = "Сначало вы должны сделать ставку";
+    public static readonly string SuccessfullyBetsRemove = "Ваши ставки успешно удалены";
+
+
+    public static readonly string NotExistBidder = "Ошибка - сначала вы должны сделать ставку";
 
     public static readonly string CurrentScoreRemoveMessage = "Все ваши ставки успешно удалены.\r\n" +
                                                               "Осталось баллов: {0}";
@@ -62,6 +65,7 @@
     public static readonly string SpeakerNotFound = "Ошибка - указанный спикер отсутствует в перечене спикеров: https://dotnext-moscow.ru/people/";
 
     public static readonly string HelpText = "Бот понимает команды:\r\n" +
+                                             "\r\n" +
                                              "/start - начало работы с ботом\r\n" +
                                              "/bet - сделать ставку на спикера\r\n" +
                                              "/removebet - снять поставленную ранее ставку\r\n" +
@@ -71,7 +75,7 @@
 
     public static readonly string IncorectNomination = "Ошибка - некорректный формат номинации, возможные варианты: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, top3, top5, top10";
 
-    public static readonly string NominationNotEmpty = "Номинация не может быть пустой";
+    public static readonly string NominationNotEmpty = "Ошибка - номинация не может быть пустой";
 
     public static readonly string GettingCurrentScoreException = "Не удалось получить текущее состояние счёта";
 

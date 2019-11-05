@@ -98,7 +98,7 @@ namespace BetDotNext.ExternalServices
         _logger.LogDebug("Created new bidder {0}", bet.Bidder);
 
         var bidderId = !bidders.Any() ? 0 : bidders.Max(p => p.Id);
-        bidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 0, StartScore = 1000 };
+        bidder = new Bidder { Id = ++bidderId, Name = bet.Bidder, CurrentScore = 1000, StartScore = 1000 };
         await AddBidder(bidder);
 
         bidders = await BiddersAsync();
@@ -163,12 +163,12 @@ namespace BetDotNext.ExternalServices
       return bidders.Single(x => x.Id == bidder?.Id).CurrentScore;
     }
 
-    public async Task<string> DeleteRateForBetAsync(CreateBet bet)
+    public async Task<long?> DeleteRateForBetAsync(CreateBet bet)
     {
       if (bet.Rate != 0)
       {
         _logger.LogError($"ERROR - rate: {bet.Rate} != 0");
-        return StringsResource.BetRateNotEquelsMessage;
+        throw new UnexpectedFormatMessageException(StringsResource.BetRateMustZero);
       }
 
       await AuthenticationAsync();
@@ -178,7 +178,7 @@ namespace BetDotNext.ExternalServices
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");
-        return StringsResource.NotExistingBidderMessage;
+        throw new UnexpectedFormatMessageException(StringsResource.NotExistBidder);
       }
 
       var teams = await TeamsAsync();
@@ -186,7 +186,7 @@ namespace BetDotNext.ExternalServices
       if (speaker == null)
       {
         _logger.LogError("ERROR - speaker not found");
-        return StringsResource.SpeakerNotFound;
+        throw new UnexpectedFormatMessageException(StringsResource.SpeakerNotFound);
       }
 
       var rides = await RidesAsync();
@@ -213,11 +213,11 @@ namespace BetDotNext.ExternalServices
       }
 
       bidders = await BiddersAsync();
-      var currentScore = bidders.Single(x => x.Id == bidder.Id).CurrentScore;
+      var currentScore = bidders.Single(x => x.Id == bidder.Id)?.CurrentScore;
 
       _logger.LogInformation("Current score a participant {0} = {1} from", bet.Bidder, currentScore);
 
-      return string.Format(StringsResource.CurrentScoreRemoveMessage, currentScore);
+      return currentScore;
     }
 
     public async Task<string> DeleteAllBetAsync(string bidderName)
@@ -229,7 +229,7 @@ namespace BetDotNext.ExternalServices
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");
-        return StringsResource.NotExistingBidderMessage;
+        return StringsResource.NotExistBidder;
       }
 
       var rides = await RidesAsync();
@@ -270,7 +270,7 @@ namespace BetDotNext.ExternalServices
       if (bidder == null)
       {
         _logger.LogError("ERROR - bidder not found");
-        return StringsResource.NotExistingBidderMessage;
+        return StringsResource.NotExistBidder;
       }
 
       return string.Format(StringsResource.CurrentScoreMessage, bidder.CurrentScore);
