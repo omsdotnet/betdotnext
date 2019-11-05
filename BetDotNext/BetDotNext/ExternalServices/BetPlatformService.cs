@@ -105,6 +105,10 @@ namespace BetDotNext.ExternalServices
       }
 
       var teams = await TeamsAsync();
+
+      _logger.LogInformation(string.Join(", ", teams.Select(x => x.Name.ToLower().Replace('-', ' ')).ToArray()));
+      _logger.LogInformation(bet.Speaker.ToLower());
+
       var speaker = teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
       if (speaker == null)
       {
