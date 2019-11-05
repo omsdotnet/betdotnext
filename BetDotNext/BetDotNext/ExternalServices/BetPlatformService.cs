@@ -106,10 +106,10 @@ namespace BetDotNext.ExternalServices
 
       var teams = await TeamsAsync();
 
-      _logger.LogInformation(string.Join(", ", teams.Select(x => x.Name.ToLower().Replace('-', ' ')).ToArray()));
-      _logger.LogInformation(bet.Speaker.ToLower());
+      _logger.LogInformation(string.Join(", ", teams.Select(x => x.Name.ToLowerInvariant().Replace('-', ' ')).ToArray()));
+      _logger.LogInformation(bet.Speaker.ToLowerInvariant());
 
-      var speaker = teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
+      var speaker = teams.SingleOrDefault(x => x.Name.ToLowerInvariant().Replace('-', ' ') == bet.Speaker.ToLowerInvariant());
       if (speaker == null)
       {
         _logger.LogError("Not found speaker");
@@ -186,7 +186,7 @@ namespace BetDotNext.ExternalServices
       }
 
       var teams = await TeamsAsync();
-      var speaker = teams.SingleOrDefault(x => x.Name.ToLower().Replace('-', ' ') == bet.Speaker.ToLower());
+      var speaker = teams.SingleOrDefault(x => x.Name.ToLowerInvariant().Replace('-', ' ') == bet.Speaker.ToLowerInvariant());
       if (speaker == null)
       {
         _logger.LogError("ERROR - speaker not found");
