@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -106,10 +107,12 @@ namespace BetDotNext.ExternalServices
 
       var teams = await TeamsAsync();
 
-      _logger.LogInformation(string.Join(", ", teams.Select(x => x.Name.ToLowerInvariant().Replace('-', ' ')).ToArray()));
-      _logger.LogInformation(bet.Speaker.ToLowerInvariant());
+      var ci = new CultureInfo("ru-RU", false);
 
-      var speaker = teams.SingleOrDefault(x => x.Name.ToLowerInvariant().Replace('-', ' ') == bet.Speaker.ToLowerInvariant());
+      _logger.LogInformation(string.Join(", ", teams.Select(x => x.Name.ToLower(ci).Replace('-', ' ')).ToArray()));
+      _logger.LogInformation(bet.Speaker.ToLower(ci));
+
+      var speaker = teams.SingleOrDefault(x => x.Name.ToLower(ci).Replace('-', ' ') == bet.Speaker.ToLower(ci));
       if (speaker == null)
       {
         _logger.LogError("Not found speaker");
