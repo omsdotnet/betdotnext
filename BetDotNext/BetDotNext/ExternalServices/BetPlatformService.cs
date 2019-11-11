@@ -185,7 +185,24 @@ namespace BetDotNext.ExternalServices
 
       var teams = await TeamsAsync();
       var spakerNormalized = bet.Speaker.ToLower();
-      var culture = new CultureInfo("ru-RU", false);
+
+      CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+
+      // Determine the specific culture associated with each neutral culture.
+      foreach (var item in cultures)
+      {
+        _logger.LogInformation("{0,-12} {1,-40}", item.Name, item.EnglishName);
+        try
+        {
+          _logger.LogInformation("{0}", CultureInfo.CreateSpecificCulture(item.Name).Name);
+        }
+        catch (ArgumentException)
+        {
+          _logger.LogInformation("(no associated specific culture)");
+        }
+      }
+
+      var culture = new CultureInfo("ru", false);
       Team speaker = null;
 
       _logger.LogInformation($"{culture.Name} - {culture.DisplayName}");
