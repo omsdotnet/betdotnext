@@ -185,13 +185,15 @@ namespace BetDotNext.ExternalServices
 
       var teams = await TeamsAsync();
       var spakerNormalized = bet.Speaker.ToLower();
+      var culture = new CultureInfo("ru-RU", false);
       Team speaker = null;
 
+      _logger.LogInformation($"{culture.Name} - {culture.DisplayName}");
       _logger.LogInformation(spakerNormalized);
 
       foreach (var item in teams)
       {
-        var itemNormalized = item.Name.ToLower();
+        var itemNormalized = item.Name.ToLower(culture);
 
         _logger.LogInformation(itemNormalized);
 
