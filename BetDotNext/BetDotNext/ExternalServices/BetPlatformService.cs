@@ -186,7 +186,7 @@ namespace BetDotNext.ExternalServices
       var teams = await TeamsAsync();
       var spakerNormalized = bet.Speaker.ToLower();
 
-      CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+      CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
       // Determine the specific culture associated with each neutral culture.
       foreach (var item in cultures)
