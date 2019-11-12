@@ -184,43 +184,7 @@ namespace BetDotNext.ExternalServices
       }
 
       var teams = await TeamsAsync();
-      var spakerNormalized = bet.Speaker.ToLower();
-
-      CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-
-      // Determine the specific culture associated with each neutral culture.
-      foreach (var item in cultures)
-      {
-        _logger.LogInformation("{0,-12} {1,-40}", item.Name, item.EnglishName);
-        try
-        {
-          _logger.LogInformation("{0}", CultureInfo.CreateSpecificCulture(item.Name).Name);
-        }
-        catch (ArgumentException)
-        {
-          _logger.LogInformation("(no associated specific culture)");
-        }
-      }
-
-      var culture = new CultureInfo("ru", false);
-      Team speaker = null;
-
-      _logger.LogInformation($"{culture.Name} - {culture.DisplayName}");
-      _logger.LogInformation(spakerNormalized);
-
-      foreach (var item in teams)
-      {
-        var itemNormalized = item.Name.ToLower(culture);
-
-        _logger.LogInformation(itemNormalized);
-
-        if (itemNormalized == spakerNormalized)
-        {
-          speaker = item;
-          break;
-        }
-      }
-
+      var speaker = teams.SingleOrDefault(x => x.Name.Replace("-", " ").ToLower() == bet.Speaker.ToLower());
       if (speaker == null)
       {
         _logger.LogError("ERROR - speaker not found");
