@@ -20,9 +20,6 @@ RUN apk add --no-cache icu-libs
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-ENV LC_ALL ru_RU.UTF-8
-ENV LANG ru_RU.UTF-8
-
 WORKDIR /app
 COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "BetDotNext.dll"]
