@@ -52,16 +52,16 @@ namespace BetDotNext.Services
 
     private async void TelegramBotClientOnOnInlineQuery(object sender, InlineQueryEventArgs e)
     {
-      var l = new List<InlineQueryResultCachedPhoto>();
-      l.Add(new InlineQueryResultCachedPhoto("Рома Просин", 
-        "https://images.ctfassets.net/9n3x4rtjlya6/2JnpX9q4fypdaeNjdhhbzz/dc2d2542b6fd121ed7a1e71d557802b6/prosin.jpg?w=200")
+      string url = "https://images.ctfassets.net/9n3x4rtjlya6/2JnpX9q4fypdaeNjdhhbzz/dc2d2542b6fd121ed7a1e71d557802b6/prosin.jpg?w=200";
+      var l = new List<InlineQueryResultPhoto>();
+      l.Add(new InlineQueryResultPhoto("Рома Просин", url, url)
       {
         Caption = "Рома Просин",
         Description = "Спикер из Райфа",
         Title = "Code Review",
       });
 
-      await _telegramBotClient.AnswerInlineQueryAsync(e.InlineQuery.Id, l);
+      await _telegramBotClient.AnswerInlineQueryAsync(e.InlineQuery.Id, l, isPersonal: true, cacheTime: 5000);
     }
 
     public void Stop()
