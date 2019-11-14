@@ -50,7 +50,7 @@ namespace BetDotNext.Services
       }
     }
 
-    private void TelegramBotClientOnOnInlineQuery(object sender, InlineQueryEventArgs e)
+    private async void TelegramBotClientOnOnInlineQuery(object sender, InlineQueryEventArgs e)
     {
       var l = new List<InlineQueryResultCachedPhoto>();
       l.Add(new InlineQueryResultCachedPhoto("Рома Просин", 
@@ -61,7 +61,7 @@ namespace BetDotNext.Services
         Title = "Code Review",
       });
 
-      _telegramBotClient.AnswerInlineQueryAsync(e.InlineQuery.Id, l);
+      await _telegramBotClient.AnswerInlineQueryAsync(e.InlineQuery.Id, l);
     }
 
     public void Stop()
