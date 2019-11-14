@@ -53,7 +53,13 @@ namespace BetDotNext.Services
     private void TelegramBotClientOnOnInlineQuery(object sender, InlineQueryEventArgs e)
     {
       var l = new List<InlineQueryResultCachedPhoto>();
-      l.Add(new InlineQueryResultCachedPhoto("Рома Просин", "https://images.ctfassets.net/9n3x4rtjlya6/2JnpX9q4fypdaeNjdhhbzz/dc2d2542b6fd121ed7a1e71d557802b6/prosin.jpg?w=200"));
+      l.Add(new InlineQueryResultCachedPhoto("Рома Просин", 
+        "https://images.ctfassets.net/9n3x4rtjlya6/2JnpX9q4fypdaeNjdhhbzz/dc2d2542b6fd121ed7a1e71d557802b6/prosin.jpg?w=200")
+      {
+        Caption = "Рома Просин",
+        Description = "Спикер из Райфа",
+        Title = "Code Review",
+      });
 
       _telegramBotClient.AnswerInlineQueryAsync(e.InlineQuery.Id, l);
     }
