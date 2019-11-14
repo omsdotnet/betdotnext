@@ -38,6 +38,7 @@ namespace BetDotNext.Services
         }
 
         _telegramBotClient.OnMessage += OnMessageReceive;
+        _telegramBotClient.OnInlineQuery += OnMessageInlineReceive;
         _telegramBotClient.StartReceiving();
       }
       catch (ApiRequestException ex)
@@ -71,6 +72,12 @@ namespace BetDotNext.Services
       }
 
       MessageHandler(message);
+    }
+
+    private void OnMessageInlineReceive(object sender, InlineQueryEventArgs args)
+    {
+      var inline = args.InlineQuery.Query;
+      _logger.LogDebug("Test message inline {query}", inline);
     }
 
     private async void MessageHandler(Message message)
