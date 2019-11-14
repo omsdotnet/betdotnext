@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using BetDotNext.BotPlatform;
 using BetDotNext.Utils;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineQueryResults;
 
 namespace BetDotNext.Services
 {
@@ -38,7 +40,7 @@ namespace BetDotNext.Services
         }
 
         _telegramBotClient.OnMessage += OnMessageReceive;
-        _telegramBotClient.OnInlineQuery += OnMessageInlineReceive;
+        _telegramBotClient.OnInlineQuery += TelegramBotClientOnOnInlineQuery;
         _telegramBotClient.StartReceiving();
       }
       catch (ApiRequestException ex)
@@ -46,6 +48,14 @@ namespace BetDotNext.Services
         _logger.LogCritical($"Message: {ex.Message}");
         throw;
       }
+    }
+
+    private void TelegramBotClientOnOnInlineQuery(object sender, InlineQueryEventArgs e)
+    {
+      var l = new List<InlineQueryResultCachedPhoto>();
+      l.Add(new InlineQueryResultCachedPhoto("Рома Просин", "https://images.ctfassets.net/9n3x4rtjlya6/2JnpX9q4fypdaeNjdhhbzz/dc2d2542b6fd121ed7a1e71d557802b6/prosin.jpg?w=200"));
+
+      _telegramBotClient.AnswerInlineQueryAsync(e.InlineQuery.Id, l);
     }
 
     public void Stop()
@@ -72,12 +82,6 @@ namespace BetDotNext.Services
       }
 
       MessageHandler(message);
-    }
-
-    private void OnMessageInlineReceive(object sender, InlineQueryEventArgs args)
-    {
-      var inline = args.InlineQuery.Query;
-      _logger.LogDebug("Test message inline {query}", inline);
     }
 
     private async void MessageHandler(Message message)
