@@ -63,7 +63,7 @@
     public static readonly string CurrentScoreRemoveMessage = "Все ваши ставки успешно удалены.\r\n" +
                                                               "Осталось баллов: {0}";
 
-    public static readonly string SpeakerNotFound = "Ошибка - указанный спикер отсутствует в перечене спикеров: https://dotnext-piter.ru/2021/spb/people/";
+    public static readonly string SpeakerNotFound = "Ошибка - указанный спикер отсутствует в перечене спикеров: https://dotnext-moscow.ru/faces/";
 
     public static readonly string HelpText = "Бот понимает команды:\r\n" +
                                              "\r\n" +
